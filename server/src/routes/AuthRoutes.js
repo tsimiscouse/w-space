@@ -3,6 +3,7 @@ const { User } = require("../models/UserModels");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
+const verifyToken = require("../middleware/AuthMiddleware");
 
 // Login route
 router.post("/", async (req, res) => {
@@ -22,7 +23,7 @@ router.post("/", async (req, res) => {
         const token = user.generateAuthToken(); 
 
         // Set the token in a cookie
-        res.cookie('token', token, { httpOnly: true }); 
+        res.cookie('token', token, { httpOnly: true, secure: false });
 
         // Redirect after setting the cookie
         return res.redirect('/');
@@ -34,19 +35,22 @@ router.post("/", async (req, res) => {
 });
 
 // Profile route
-router.get("/profile", (req, res) => {
-    const token = req.cookies.token; // Access the token cookie
-    if (!token) return res.status(401).send({ message: "Access denied." });
+router.get("/profile", verifyToken, async (req, res) => {
+    console.log("Token:", req.cookies.token); // Log the token
+    console.log("User ID from token:", req.user._id); // Log the user ID from the token
 
-    // Verify the token
-    jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, user) => {
-        if (err) return res.status(403).send({ message: "Invalid token." });
-        
-        // Fetch the user profile using user ID from the token
-        const userProfile = await User.findById(user._id);
-        if (!userProfile) return res.status(404).send({ message: "User not found." });
+    const userProfile = await User.findById(req.user._id);
+    if (!userProfile) {
+        console.error("User not found:", req.user._id); // Log user not found
+        return res.status(404).send({ message: "User not found." });
+    }
 
-        res.send({ message: "Welcome to your profile!", user: userProfile });
+    res.send({
+        message: "Welcome to your profile!",
+        user: {
+            firstName: userProfile.firstName,
+            lastName: userProfile.lastName
+        }
     });
 });
 
@@ -58,5 +62,14 @@ const validate = (data) => {
     });
     return schema.validate(data);
 };
+
+// Log Out Routes
+router.post("/logout", (req, res) => {
+    // Clear the cookie by setting it with an expired date
+    res.clearCookie("token"); 
+
+    // Send a response indicating the user has logged out
+    res.send({ message: "Logged out successfully" });
+});
 
 module.exports = router;

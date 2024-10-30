@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import Logo from '../assets/Logo.jpg';
 
 const Login = ({ onLoginSuccess }) => {
     const [data, setData] = useState({ email: "", password: "" });
@@ -23,9 +24,7 @@ const Login = ({ onLoginSuccess }) => {
         setError("");
         try {
             const url = "http://localhost:5000/api/auth"; 
-            // Include withCredentials to handle cookies properly
-            const { data: res } = await axios.post(url, data, { withCredentials: true });
-            // Manage email storage based on rememberMe
+            await axios.post(url, data, { withCredentials: true });
             if (rememberMe) {
                 localStorage.setItem("email", data.email);
             } else {
@@ -43,20 +42,27 @@ const Login = ({ onLoginSuccess }) => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-            {loading && (
-                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
-                    <div className="loader-wrapper">
-                        <span className="loader">
-                            <span className="loader-inner"></span>
-                        </span>
+        <div className="min-h-screen flex">
+            {/* Logo Section */}
+            <div className="w-1/2 flex items-center justify-center bg-transparent">
+                <img src={Logo} alt="W-Space Logo" style={{ width: '400px', height: 'auto' }} />
+            </div>
+
+            {/* Login Form Section */}
+            <div className="w-1/2 flex items-center justify-center bg-transparent p-8">
+                {loading && (
+                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
+                        <div className="loader-wrapper">
+                            <span className="loader">
+                                <span className="loader-inner"></span>
+                            </span>
+                        </div>
                     </div>
-                </div>
-            )}
-            <div className="relative w-11/12 max-w-4xl h-auto flex rounded-lg shadow-lg overflow-hidden">
-                <div className="w-3/4 flex flex-col items-center justify-center bg-white p-8">
+                )}
+                <div className="relative w-full max-w-lg flex flex-col">
+                    <h1 className="text-6xl font-bold mb-[80px]">Creating better moment.</h1>
+                    <h2 className="text-2xl font-bold mb-6 items-start">Login to your account</h2>
                     <form className="flex flex-col items-center w-full" onSubmit={handleSubmit}>
-                        <h1 className="text-4xl font-bold mb-6">Login to Your Account</h1>
                         <input
                             type="email"
                             placeholder="Email"
@@ -64,7 +70,7 @@ const Login = ({ onLoginSuccess }) => {
                             onChange={handleChange}
                             value={data.email}
                             required
-                            className="outline-none border w-full p-4 rounded-lg bg-green-100 mb-4"
+                            className="outline-none border-2 border-gray-300 w-full p-4 rounded-lg focus:border-black mb-4 transition duration-200 ease-in"
                         />
                         <input
                             type="password"
@@ -73,7 +79,7 @@ const Login = ({ onLoginSuccess }) => {
                             onChange={handleChange}
                             value={data.password}
                             required
-                            className="outline-none border w-full p-4 rounded-lg bg-green-100 mb-4"
+                            className="outline-none border-2 border-gray-300 w-full p-4 rounded-lg focus:border-black mb-4 transition duration-200 ease-in"
                         />
                         <div className="flex items-center justify-between w-full mb-4">
                             <label className="flex items-center">
@@ -91,19 +97,16 @@ const Login = ({ onLoginSuccess }) => {
                                 {error}
                             </div>
                         )}
-                        <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold transition-transform duration-300 hover:scale-105">
+                        <button type="submit" className="w-full bg-black text-white py-3 rounded-lg font-bold transition-transform duration-300 hover:scale-105">
                             {loading ? "Signing In..." : "Sign In"}
                         </button>
                     </form>
-                </div>
-
-                <div className="w-2/5 flex flex-col items-center justify-center bg-blue-600 text-white p-8">
-                    <h1 className="text-4xl font-bold mb-4">New Here?</h1>
-                    <Link to="/register">
-                        <button type="button" className="w-full bg-white text-blue-600 px-5 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105">
+                    <div className="mt-4 text-center">
+                        <span>New Here? </span>
+                        <Link to="/register" className="text-blue-600 underline">
                             Sign Up
-                        </button>
-                    </Link>
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

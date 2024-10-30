@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import Logo from '../assets/Logo.jpg';
 
 const Signup = () => {
     const [data, setData] = useState({
@@ -39,29 +40,27 @@ const Signup = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            {loading && (
-                <div className="loader-wrapper">
-                    <span className="loader">
-                        <span className="loader-inner"></span>
-                    </span>
-                </div>
-            )}
-            <div className="flex w-[900px] h-[500px] rounded-lg shadow-lg overflow-hidden">
-                <div className="flex flex-col items-center justify-center w-1/3 bg-[#1260CC] text-white">
-                    <h1 className="text-3xl font-bold">Welcome Back</h1>
-                    <Link to="/">
-                        <button
-                            type="button"
-                            className="mt-4 px-4 py-2 bg-white text-[#1260CC] rounded-lg font-bold transition-transform duration-300 hover:scale-105"
-                        >
-                            Sign in
-                        </button>
-                    </Link>
-                </div>
-                <div className="flex flex-col items-center justify-center w-2/3 bg-white">
-                    <form className="flex flex-col items-center" onSubmit={handleSubmit}>
-                        <h1 className="text-4xl font-bold">Create Account</h1>
+        <div className="flex min-h-screen">
+            {/* Logo Section */}
+            <div className="w-1/2 flex items-center justify-center bg-transparent">
+                <img src={Logo} alt="W-Space Logo" style={{ width: '400px', height: 'auto' }} />
+            </div>
+
+            {/* Login Form Section */}
+            <div className="w-1/2 flex items-center justify-center bg-transparent p-8">
+                {loading && (
+                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
+                        <div className="loader-wrapper">
+                            <span className="loader">
+                                <span className="loader-inner"></span>
+                            </span>
+                        </div>
+                    </div>
+                )}
+                <div className="relative w-full flex max-w-lg flex-col">
+                    <h1 className="text-6xl font-black mb-[50px]">Enhance productivity.</h1>
+                    <h2 className="text-2xl font-black mb-1">Join now</h2>
+                    <form className="flex flex-col w-full text-sm" onSubmit={handleSubmit}>
                         <input
                             type="text"
                             placeholder="First Name"
@@ -69,7 +68,7 @@ const Signup = () => {
                             onChange={handleChange}
                             value={data.firstName}
                             required
-                            className="mt-4 p-4 border border-gray-300 rounded-lg w-[370px] focus:outline-none focus:ring-2 focus:ring-[#1260CC]"
+                            className="mt-4 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-black"
                         />
                         <input
                             type="text"
@@ -78,7 +77,7 @@ const Signup = () => {
                             onChange={handleChange}
                             value={data.lastName}
                             required
-                            className="mt-4 p-4 border border-gray-300 rounded-lg w-[370px] focus:outline-none focus:ring-2 focus:ring-[#1260CC]"
+                            className="mt-4 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-black"
                         />
                         <input
                             type="email"
@@ -87,7 +86,7 @@ const Signup = () => {
                             onChange={handleChange}
                             value={data.email}
                             required
-                            className="mt-4 p-4 border border-gray-300 rounded-lg w-[370px] focus:outline-none focus:ring-2 focus:ring-[#1260CC]"
+                            className="mt-4 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-black"
                         />
                         <input
                             type="password"
@@ -96,19 +95,25 @@ const Signup = () => {
                             onChange={handleChange}
                             value={data.password}
                             required
-                            className="mt-4 p-4 border border-gray-300 rounded-lg w-[370px] focus:outline-none focus:ring-2 focus:ring-[#1260CC]"
+                            className="mt-4 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-black"
                         />
                         {error && (
-                            <div className="mt-4 w-[370px] p-4 bg-red-500 text-white rounded-lg text-center">
+                            <div className="mt-4 w-full p-3 bg-red-500 text-white rounded-lg text-center">
                                 {error}
                             </div>
                         )}
                         <button
                             type="submit"
-                            className="mt-4 w-full py-2 bg-[#1260CC] text-white rounded-lg font-bold transition-transform duration-300 hover:scale-105"
+                            className="mt-4 w-full py-4 bg-black text-white rounded-lg font-bold transition-transform duration-300 hover:scale-105"
                         >
                             Sign Up
                         </button>
+                        <div className="mt-4 text-center">
+                            <span>Already Have an Account? </span>
+                            <Link to="/" className="text-blue-600 underline">
+                                Log In
+                            </Link>
+                        </div>
                     </form>
                 </div>
             </div>
