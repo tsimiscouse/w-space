@@ -2,11 +2,41 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import DropdownCity from './DropdownCity';
 import DropdownType from './DropdownType';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import './Home.css';
+
+const words = ["Space.", "Place.", "Room."];
 
 const Home = () => {
     const [selectedCity, setSelectedCity] = useState("Select a City");
     const [selectedSpaceType, setSelectedSpaceType] = useState("Select a Space Type");
+    const [currentWord, setCurrentWord] = useState("");
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [wordIndex, setWordIndex] = useState(0);
+    const [charIndex, setCharIndex] = useState(0);
+
+    useEffect(() => {
+        const typingInterval = setInterval(() => {
+            if (isDeleting) {
+                if (charIndex > 0) {
+                    setCurrentWord(prev => prev.slice(0, -1)); 
+                    setCharIndex(charIndex - 1);
+                } else {
+                    setIsDeleting(false);
+                    setWordIndex((wordIndex + 1) % words.length); 
+                }
+            } else {
+                if (charIndex < words[wordIndex].length) {
+                    setCurrentWord(words[wordIndex].slice(0, charIndex + 1)); 
+                    setCharIndex(charIndex + 1);
+                } else {
+                    setIsDeleting(true);
+                }
+            }
+        }, 150); 
+
+        return () => clearInterval(typingInterval);
+    }, [isDeleting, charIndex, wordIndex]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -17,24 +47,27 @@ const Home = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />
+            <div className="absolute top-1/4 right-[120px] w-[750px] h-[500px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
             <div className="flex-grow flex items-center justify-center">
-                <div className="flex min-h-screen w-full max-w-6xl">
-                    <div className="w-1/3 flex items-center justify-center">
-                        <h1 className="text-6xl font-black">Find your Perfect Space.</h1>
+                <div className="flex h-[650px] w-full max-w-6xl">
+                    <div className="w-[450px] flex items-center justify-center">
+                        <h1 className="text-6xl font-black">
+                            Find your Perfect 
+                            <span className="inline-block ml-3">{currentWord}</span>
+                            <span className="inline-block animate-blink">|</span> 
+                        </h1>
                     </div>
                     <div className="w-2/3 flex items-center justify-center space-x-4">
-                        <div className="relative">
+                        <div className='px-[80px] py-[60px] bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 border-2 border-gray-100 flex gap-5'>
                             <DropdownCity setSelectedCity={setSelectedCity} />
-                        </div>
-                        <div className="relative">
                             <DropdownType setSelectedSpaceType={setSelectedSpaceType} />
+                            <button 
+                                onClick={handleSubmit}
+                                className="px-4 py-2 bg-gradient-to-r from-fuchsia-500 to-cyan-500 opacity-70 text-white font-black rounded-md transform transition-transform duration-300 hover:scale-105"
+                            >
+                                Submit
+                            </button>
                         </div>
-                        <button 
-                            onClick={handleSubmit}
-                            className="px-4 py-2 bg-white text-black rounded-md border-2 border-black transform transition-transform duration-300 hover:scale-105"
-                        >
-                            Submit
-                        </button>
                     </div>
                 </div>
             </div>

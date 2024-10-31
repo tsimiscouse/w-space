@@ -43,6 +43,7 @@ const Login = ({ onLoginSuccess }) => {
 
     return (
         <div className="min-h-screen flex">
+            <div className="absolute top-[20px] right-[0px] w-[800px] h-[600px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
             {/* Logo Section */}
             <div className="w-1/2 flex items-center justify-center bg-transparent">
                 <img src={Logo} alt="W-Space Logo" style={{ width: '400px', height: 'auto' }} />

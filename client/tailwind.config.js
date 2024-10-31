@@ -6,6 +6,9 @@ module.exports = {
       fontFamily: {
         sans: ['Lato', 'sans-serif'], 
       },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(circle, var(--tw-gradient-stops))',
+      },
     },
   },
   plugins: [],

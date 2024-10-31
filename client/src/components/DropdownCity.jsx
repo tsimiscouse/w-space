@@ -9,11 +9,11 @@ const CityDropDown = ({ setSelectedCity }) => {
     const cities = ["Yogyakarta", "Jakarta", "Bandung", "Denpasar"];
 
     return (
-        <div className="relative p-8 flex items-center justify-center bg-white">
+        <div className="relative flex items-center justify-center bg-white">
             <motion.div animate={open ? "open" : "closed"} className="relative">
                 <button
                     onClick={() => setOpen((prev) => !prev)}
-                    className="flex items-center w-48 h-12 py-3 px-5 rounded-md text-white bg-black transform transition-transform duration-300 hover:scale-105 relative"
+                    className="flex items-center w-48 h-12 py-3 px-5 rounded-md text-white bg-[#191B1D] transform transition-transform duration-300 hover:scale-105 relative"
                 >
                     <span className="font-medium text-sm truncate">{selectedCity}</span>
                     <motion.span 
@@ -29,7 +29,7 @@ const CityDropDown = ({ setSelectedCity }) => {
                     initial={wrapperVariants.closed}
                     variants={wrapperVariants}
                     className={`absolute top-full left-0 mt-2 
-                        w-48 p-2 bg-black rounded-lg shadow-xl z-10`}
+                        w-48 p-2 bg-[#191B1D] rounded-lg shadow-xl z-10`}
                 >
                     {cities.map((city, index) => (
                         <Option 

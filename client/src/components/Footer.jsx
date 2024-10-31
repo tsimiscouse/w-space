@@ -4,7 +4,7 @@ import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaTwitter, FaInstagram, FaFacebook
 
 const Footer = () => {
     return (
-        <footer className="bg-black text-white py-8 px-4">
+        <footer className="bg-[#191B1D] text-white py-8 px-4">
             <div className="container max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Logo and Contact Section */}
                 <div className="flex w-full items-start text-lg gap-5">

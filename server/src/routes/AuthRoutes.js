@@ -36,9 +36,6 @@ router.post("/", async (req, res) => {
 
 // Profile route
 router.get("/profile", verifyToken, async (req, res) => {
-    console.log("Token:", req.cookies.token); // Log the token
-    console.log("User ID from token:", req.user._id); // Log the user ID from the token
-
     const userProfile = await User.findById(req.user._id);
     if (!userProfile) {
         console.error("User not found:", req.user._id); // Log user not found
