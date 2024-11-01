@@ -32,6 +32,8 @@ connectDB();
 app.use("/api/users", require("./src/routes/UserRoutes")); 
 app.use("/api/auth", require("./src/routes/AuthRoutes"));
 
+app.use("/space", require("./src/routes/SpaceRoutes"));
+
 // Basic route
 app.get("/", (req, res) => {
     res.send("Welcome to W-Space API!");

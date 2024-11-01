@@ -37,7 +37,7 @@ const spaceSchema = new mongoose.Schema({
             url: { type: String, required: true },
             altText: { type: String }
         }],
-        validate: [arrayLimit, '{PATH} harus memiliki setidaknya satu gambar']
+        validate: [arrayLimit, '{PATH} minimal satu gambar']
     },
     ratings: {
         type: Number,
@@ -64,10 +64,10 @@ const spaceSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
-
+const Space = mongoose.model('space', spaceSchema);
 
 function arrayLimit(val) {
     return val.length > 0;
 }
 
-module.exports = mongoose.model('Space', spaceSchema);
+module.exports = Space;
