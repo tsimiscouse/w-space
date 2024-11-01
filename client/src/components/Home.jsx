@@ -4,6 +4,7 @@ import DropdownCity from './DropdownCity';
 import DropdownType from './DropdownType';
 import { useState, useEffect } from 'react';
 import './Home.css';
+import Slider from './Slider';
 
 const words = ["Space.", "Place.", "Room."];
 
@@ -71,7 +72,12 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            <Footer />
+            <div className="pb-5">
+                <Slider />
+            </div>
+            <div className="mt-5">
+                <Footer />
+            </div>
         </div>
     );
 };
