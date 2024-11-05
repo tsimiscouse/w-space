@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaBars, FaUserCircle } from "react-icons/fa"; 
 import Logo from '../assets/Logo.jpg';
 import Cookies from 'js-cookie';
@@ -10,6 +10,7 @@ const Navbar = () => {
     const [firstName, setFirstName] = useState("");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const navigate = useNavigate();
 
     const fetchUserData = async () => {
         try {
@@ -40,19 +41,20 @@ const Navbar = () => {
     const handleLogout = async () => {
         try {
             await axios.post("http://localhost:5000/api/auth/logout", { withCredentials: true });
-            Cookies.remove("token");
-            window.location.href = "/";
+            Cookies.remove("token");          
+            localStorage.removeItem("token"); 
+            navigate("/");                    
         } catch (error) {
             console.error("Logout error:", error);
         }
     };
 
     return (
-        <nav className="bg-white p-4 flex justify-between items-center border-b-2 border-gray-300">
+        <nav className="navbar-fixed bg-white p-4 flex justify-between items-center border-b-2 border-gray-300">
             <div className="flex items-center space-x-8 ml-[160px]">
                 <img src={Logo} alt="Logo" className="h-10" />
                 <div className="flex space-x-[50px] px-[30px]">
-                    <Link to="/app" className="relative hover-underline ">Home</Link>
+                    <Link to="/app" className="relative hover-underline">Home</Link>
                     <Link to="/search" className="relative hover-underline">Find a Space</Link>
                     <Link to="/about-us" className="relative hover-underline">About Us</Link>
                 </div>
@@ -66,7 +68,7 @@ const Navbar = () => {
                     </div>
                     <button
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className="text-[#191B1D]focus:outline-none ml-2"
+                        className="text-[#191B1D] focus:outline-none ml-2"
                     >
                         <FaBars className="h-6 w-6" />
                     </button>

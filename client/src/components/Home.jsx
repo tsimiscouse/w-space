@@ -5,7 +5,7 @@ import DropdownType from './DropdownType';
 import { useState, useEffect } from 'react';
 import './Home.css';
 
-const words = ["Space.", "Place.", "Room."];
+const words = ["Space.", "Place.", "Room.", "Spot."];
 
 const Home = () => {
     const [selectedCity, setSelectedCity] = useState("Select a City");
@@ -47,9 +47,9 @@ const Home = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />
-            <div className="absolute top-1/4 right-[120px] w-[750px] h-[500px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
+            <div className="absolute top-1/4 right-[120px] w-[750px] h-[400px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
             <div className="flex-grow flex items-center justify-center">
-                <div className="flex h-[650px] w-full max-w-6xl">
+                <div className="flex min-h-screen w-full max-w-6xl mt-4">
                     <div className="w-[450px] flex items-center justify-center">
                         <h1 className="text-6xl font-black">
                             Find your Perfect 
@@ -58,14 +58,14 @@ const Home = () => {
                         </h1>
                     </div>
                     <div className="w-2/3 flex items-center justify-center space-x-4">
-                        <div className='px-[80px] py-[60px] bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 border-2 border-gray-100 flex gap-5'>
+                        <div className='px-[80px] py-[60px] bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 border-2 border-gray-100 flex gap-5 animate-fadeInScale  '>
                             <DropdownCity setSelectedCity={setSelectedCity} />
                             <DropdownType setSelectedSpaceType={setSelectedSpaceType} />
                             <button 
                                 onClick={handleSubmit}
                                 className="px-4 py-2 bg-gradient-to-r from-fuchsia-500 to-cyan-500 opacity-70 text-white font-black rounded-md transform transition-transform duration-300 hover:scale-105"
                             >
-                                Submit
+                                Search
                             </button>
                         </div>
                     </div>
