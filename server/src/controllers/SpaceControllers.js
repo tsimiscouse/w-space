@@ -10,7 +10,7 @@ const createSpace = async (req, res) => {
         res.status(201).send(space);
 
       await newSpace.save();
-      res.status(201).json({ success: true, message: 'created successfully', book: newSpace});
+      res.status(201).json({ success: true, message: 'created successfully', space: newSpace});
       
     } catch (error) {
       res.status(500).json({ success: false, message: 'Server Error', error: error.message });

@@ -14,6 +14,8 @@ const spaceSchema = new mongoose.Schema({
     location: {
         address: { type: String, required: true },
         city: { type: String, required: true },
+        lat :  { type: String, required: true },
+        lng : { type: String, required: true },
     },
     pricePerHour: {
         type: Number,

@@ -3,9 +3,8 @@ const router = express.Router();
 const Space = require("../models/SpaceModels");
 const SpaceControllers = require('../controllers/SpaceControllers');
 
-// Route to get books with filtering, sorting, pagination
-router.get('/', getSpaceByName.getSpace);
-router.put('/', updateSpaceByName.createSpace);
-router.update('/', updateSpaceByName.updateSpace); 
+router.get('/:name', getSpaceByName.getSpace); 
+router.post('/', createSpace.createSpace); 
+router.put('/:name', updateSpaceByName.updateSpace);
 
 module.exports = router; 
