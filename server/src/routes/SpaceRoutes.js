@@ -1,10 +1,15 @@
+// SpaceRoutes.js
 const express = require('express');
 const router = express.Router();
-const Space = require("../models/SpaceModels");
-const SpaceControllers = require('../controllers/SpaceControllers');
+const spaceController = require('../controllers/SpaceControllers');
 
-router.get('/:name', getSpaceByName.getSpace); 
-router.post('/', createSpace.createSpace); 
-router.put('/:name', updateSpaceByName.updateSpace);
+// Create a new space
+router.post('/', spaceController.createSpace);
 
-module.exports = router; 
+// Search for spaces
+router.get('/search', spaceController.searchSpaces);
+
+// Get all spaces (optional)
+router.get('/', spaceController.getAllSpaces);
+
+module.exports = router;

@@ -1,49 +1,45 @@
+const Space = require('../models/SpaceModels.js');
 
-const Space = require("../src/models/space");
-
-// add new space 
-const createSpace = async (req, res) => {
-
+// Create a new space
+exports.createSpace = async (req, res) => {
+    const newSpace = new Space(req.body);
     try {
-        const space = new Space(req.body);
-        await space.save();
-        res.status(201).send(space);
-
-      await newSpace.save();
-      res.status(201).json({ success: true, message: 'created successfully', space: newSpace});
-      
+        const savedSpace = await newSpace.save();
+        res.status(201).json(savedSpace);
     } catch (error) {
-      res.status(500).json({ success: false, message: 'Server Error', error: error.message });
-    }
-  };
-
-  // update space by name
-const updateSpaceByName = async (req, res) => {
-    try {
-        const space = await Space.findOneAndUpdate({ name: req.params.name }, req.body, { new: true, runValidators: true });
-        if (!space) {
-            return res.status(404).json({ success: false, message: 'Space not found' });
-        }
-        res.status(200).json({ success: true, message: 'updated successfully', space: space });
-    } catch (error) {
-        res.status(400).json({ success: false, message: 'Update failed', error: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
-const getSpaceByName = async (req, res) => {
+// Search for spaces based on name, city, and category
+exports.searchSpaces = async (req, res) => {
+    const { query } = req.query;
+
+    const searchCriteria = {};
+
+    if (query) {
+        const regex = new RegExp(query, 'i');
+        searchCriteria.$or = [
+            { name: { $regex: regex } },
+            { 'location.city': { $regex: regex } },
+            { category: { $regex: regex } }
+        ];
+    }
+
     try {
-        const space = await Space.findOne({ name: req.params.name });
-        if (!space) {
-            return res.status(404).json({ success: false, message: 'Space not found' });
-        }
-        res.status(200).json({ success: true, space: space });
+        const spaces = await Space.find(searchCriteria);
+        res.status(200).json(spaces);
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
-module.exports = { 
-    createSpace, 
-    updateSpaceByName,
-    getSpaceByName
+// Get all spaces (optional, if you want to have this functionality)
+exports.getAllSpaces = async (req, res) => {
+    try {
+        const spaces = await Space.find();
+        res.status(200).json(spaces);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };
