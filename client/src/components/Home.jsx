@@ -5,6 +5,7 @@ import DropdownType from './DropdownType';
 import { useState, useEffect } from 'react';
 import './Home.css';
 import Slider from './Slider';
+import axios from 'axios';
 
 const words = ["Space.", "Place.", "Room.", "Spot."];
 
@@ -12,9 +13,24 @@ const Home = () => {
     const [selectedCity, setSelectedCity] = useState("Select a City");
     const [selectedSpaceType, setSelectedSpaceType] = useState("Select a Space Type");
     const [currentWord, setCurrentWord] = useState("");
+    const [spaces, setSpaces] = useState([]); // Stores the space data
     const [isDeleting, setIsDeleting] = useState(false);
     const [wordIndex, setWordIndex] = useState(0);
     const [charIndex, setCharIndex] = useState(0);
+
+    useEffect(() => {
+        // Fetch spaces from your backend API (MongoDB)
+        const fetchSpaces = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/spaces'); // Adjust URL as necessary
+                setSpaces(response.data); // Set the spaces in state
+            } catch (error) {
+                console.error("Error fetching spaces:", error);
+            }
+        };
+
+        fetchSpaces();
+    }, []);
 
     useEffect(() => {
         const typingInterval = setInterval(() => {
@@ -59,7 +75,7 @@ const Home = () => {
                         </h1>
                     </div>
                     <div className="w-2/3 flex items-center justify-center space-x-4">
-                        <div className='px-[80px] py-[60px] bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 border-2 border-gray-100 flex gap-5 animate-fadeInScale  '>
+                        <div className='px-[80px] py-[60px] bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 border-2 border-gray-100 flex gap-5 animate-fadeInScale'>
                             <DropdownCity setSelectedCity={setSelectedCity} />
                             <DropdownType setSelectedSpaceType={setSelectedSpaceType} />
                             <button 
@@ -72,8 +88,13 @@ const Home = () => {
                     </div>
                 </div>
             </div>
+            <div className='text-3xl font-black flex justify-center pb-5'>
+                <h1 className='text-center'>
+                    Recommended Places
+                </h1>
+            </div>
             <div className="pb-5">
-                <Slider />
+                <Slider spaces={spaces} />
             </div>
             <div className="mt-5">
                 <Footer />
