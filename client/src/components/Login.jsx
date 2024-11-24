@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import axios from "../axios";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from '../assets/Logo.jpg';
 
@@ -104,7 +104,7 @@ const Login = ({ onLoginSuccess }) => {
                     </form>
                     <div className="mt-4 text-center">
                         <span>New Here? </span>
-                        <Link to="/register" className="text-blue-600 underline">
+                        <Link to="/signup" className="text-blue-600 underline">
                             Sign Up
                         </Link>
                     </div>

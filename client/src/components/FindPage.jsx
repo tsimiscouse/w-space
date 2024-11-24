@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import Navbar from './Navbar'; 
 import Footer from './Footer'; 
 import SpaceCard from './SpaceCard';
 import GoogleMaps from './GoogleMaps'; 
-import axios from 'axios';
+import axios from '../axios';
 
 // Haversine formula to calculate distance between two points on the earth
 const getDistance = (lat1, lon1, lat2, lon2) => {
@@ -17,11 +18,29 @@ const getDistance = (lat1, lon1, lat2, lon2) => {
   return R * c;
 };
 
+// Function to get nearest spaces
+const getNearestSpaces = (spaces, userLocation) => {
+  const spacesWithDistance = spaces.map(space => {
+    const distance = getDistance(userLocation.lat, userLocation.lng, space.location.lat, space.location.lng);
+    return { ...space, distance };
+  });
+
+  // Sort spaces by distance and return the first 3
+  return spacesWithDistance
+    .sort((a, b) => a.distance - b.distance)
+    .slice(0, 3);
+};
+
 const FindPage = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const city = queryParams.get('city') || ''; 
+  const type = queryParams.get('type') || ''; 
+
   const [spaces, setSpaces] = useState([]); 
-  const [query, setQuery] = useState(''); 
+  const [query, setQuery] = useState(`${type} ${city}`.trim()); 
   const [filteredSpaces, setFilteredSpaces] = useState([]); 
-  const [userLocation, setUserLocation] = useState({ lat: -7.7956, lng: 110.3688 }); // Default location (Yogyakarta)
+  const [userLocation, setUserLocation] = useState({ lat: -7.7956, lng: 110.3688 }); // Default location 
   const [selectedSpace, setSelectedSpace] = useState(null); 
 
   // Fetch all spaces on component mount to display by default
@@ -30,14 +49,14 @@ const FindPage = () => {
       try {
         const response = await axios.get('http://localhost:5000/api/spaces'); // Fetch all spaces
         setSpaces(response.data);
-        setFilteredSpaces(getNearestSpaces(response.data)); // Initialize filtered spaces with nearest
+        setFilteredSpaces(getNearestSpaces(response.data, userLocation)); // Initialize filtered spaces with nearest
       } catch (error) {
         console.error('Error fetching spaces:', error);
       }
     };
 
     fetchSpaces();
-  }, []);
+  }, [userLocation]);
 
   // Get user's location
   useEffect(() => {
@@ -51,19 +70,6 @@ const FindPage = () => {
     }
   }, []);
 
-  // Filter spaces by distance
-  const getNearestSpaces = (spaces) => {
-    const spacesWithDistance = spaces.map(space => {
-      const distance = getDistance(userLocation.lat, userLocation.lng, space.location.lat, space.location.lng);
-      return { ...space, distance };
-    });
-
-    // Sort spaces by distance and return the first 3
-    return spacesWithDistance
-      .sort((a, b) => a.distance - b.distance)
-      .slice(0, 3);
-  };
-
   // Update filtered spaces when the query changes
   useEffect(() => {
     const fetchSpacesByQuery = async () => {
@@ -71,20 +77,23 @@ const FindPage = () => {
         const response = await axios.get('http://localhost:5000/api/spaces/search', {
           params: { query },
         });
-        setFilteredSpaces(getNearestSpaces(response.data));
+        setFilteredSpaces(getNearestSpaces(response.data, userLocation)); // Filter based on userLocation
       } catch (error) {
         console.error('Error fetching spaces by query:', error);
       }
     };
 
     if (query.trim() === '') {
-      // If query is empty, reset to all fetched spaces
-      setFilteredSpaces(getNearestSpaces(spaces));
+      setFilteredSpaces(getNearestSpaces(spaces, userLocation)); // Reset filtered spaces if query is empty
     } else {
-      // Fetch spaces based on the query
       fetchSpacesByQuery();
     }
   }, [query, spaces, userLocation]);
+
+  // Update the query based on URL parameters when the component mounts
+  useEffect(() => {
+    setQuery(`${type} ${city}`.trim());
+  }, [city, type]);
 
   // Handle selecting a space
   const handleSelectSpace = (space) => {
@@ -92,13 +101,15 @@ const FindPage = () => {
     setQuery(space.name);
   };
 
-  // Function to handle input focus
+  // Function to handle input focus and reset spaces
   const handleInputFocus = async () => {
-    setQuery(''); 
-    setSelectedSpace(null); 
-    const response = await axios.get('http://localhost:5000/api/spaces'); 
-    setSpaces(response.data);
-    setFilteredSpaces(getNearestSpaces(response.data)); 
+    if (!query) {
+      setQuery(''); 
+      setSelectedSpace(null); 
+      const response = await axios.get('http://localhost:5000/api/spaces'); 
+      setSpaces(response.data);
+      setFilteredSpaces(getNearestSpaces(response.data, userLocation)); 
+    }
   };
 
   return (
@@ -118,7 +129,7 @@ const FindPage = () => {
             />
           </div>
           <div 
-            className="h-[510px] rounded-lg overflow-y-auto  bg-transparent"
+            className="h-[510px] rounded-lg overflow-y-auto bg-transparent"
             style={{
               scrollbarWidth: 'none',
             }}
@@ -141,8 +152,9 @@ const FindPage = () => {
                   price={selectedSpace.pricePerHour}
                 />
               ) : (
-                getNearestSpaces(filteredSpaces).map(space => (
+                filteredSpaces.map(space => (
                   <SpaceCard 
+                  _id={space._id}
                     key={space._id} 
                     name={space.name} 
                     location={space.location.city} 

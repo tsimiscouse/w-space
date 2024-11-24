@@ -1,9 +1,16 @@
+import React, { useState, useEffect } from "react";
 import Navbar from './Navbar';
 import Footer from './Footer';
 import DropdownCity from './DropdownCity';
 import DropdownType from './DropdownType';
-import { useState, useEffect } from 'react';
+import Section from './Section';
+import SpaceCarousel from './SpaceCarousel';
+import { useNavigate } from 'react-router-dom';
 import './Home.css';
+import cws1 from '../assets/cws-section-1.jpg';
+import cws2 from '../assets/cws-section-2.jpg';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const words = ["Space.", "Place.", "Room.", "Spot."];
 
@@ -14,6 +21,8 @@ const Home = () => {
     const [isDeleting, setIsDeleting] = useState(false);
     const [wordIndex, setWordIndex] = useState(0);
     const [charIndex, setCharIndex] = useState(0);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const typingInterval = setInterval(() => {
@@ -40,9 +49,12 @@ const Home = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Selected City:", selectedCity);
-        console.log("Selected Space Type:", selectedSpaceType);
+        navigate(`/search?query=city=${encodeURIComponent(selectedCity)}&type=${encodeURIComponent(selectedSpaceType)}`); 
     };
+
+    useEffect(() => {
+        AOS.init({ duration: 2000 });
+    }, []);
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -69,6 +81,34 @@ const Home = () => {
                             </button>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div className='min-h-[1080px] px-[40px]'>
+                <div className="absolute left-[100px] w-[500px] h-[400px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
+                {/* Section 1 */}
+                <div data-aos="fade-left">
+                    <Section
+                        image={cws1}
+                        title="Unlock Your Ideal Workspace"
+                        description="Whether you're a startup or an established company, we provide the perfect space for your team. Discover flexible memberships and fully equipped offices that adapt to your needs, empowering your productivity."
+                        link="#"
+                    />    
+                </div>          
+                <div className="absolute right-[100px] w-[500px] h-[400px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
+                {/* Section 2 */}
+                <div data-aos="fade-right">
+                    <Section
+                        image={cws2}
+                        title="Future-Ready Workspaces for Your Hybrid Workforce"
+                        description="Transform your real estate strategy with scalable office solutions that blend flexibility and cost-efficiency. From coworking spaces to turnkey offices, we’ve got everything you need to power your hybrid work model."
+                        link="#"
+                        reverse={true}
+                        data-aos="fade-right"
+                    />
+                </div>
+
+                <div className="py-12 mb-12" data-aos="fade-up">
+                    <SpaceCarousel />
                 </div>
             </div>
             <Footer />
