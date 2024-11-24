@@ -11,6 +11,7 @@ import cws1 from '../assets/cws-section-1.jpg';
 import cws2 from '../assets/cws-section-2.jpg';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import axios from "axios";
 
 const words = ["Space.", "Place.", "Room.", "Spot."];
 
