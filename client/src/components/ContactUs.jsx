@@ -67,7 +67,7 @@ const ContactUs = () => {
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#D9E4F5] via-[#E3FDFD] to-[#F9E5E7]">
-            <h1 className="text-6xl font-extrabold text-[#191B1D] mb-8 tracking-wide underline underline-offset-8 decoration-[#34D399]">
+            <h1 className="text-6xl font-extrabold text-[#191B1D] mb-8 tracking-wide decoration-[#34D399]">
                 Contact Us
             </h1>
             <form
