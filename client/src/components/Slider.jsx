@@ -1,33 +1,21 @@
-// Carousel.jsx
-import { useState } from 'react';
+import React, { useState } from 'react';
+import CarouselCard from './CarouselCard';
 
-const Slider = () => {
+const Slider = ({ spaces }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const cards = [
-        <div key="1" className="h-[300px] p-4 flex flex-col justify-center items-center bg-white rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold">Place 1: Placeholder</h2>
-            <p>Description placeholder.</p>
-        </div>,
-        <div key="2" className="h-[300px] p-4 flex flex-col justify-center items-center bg-white rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold">Place 2: Placeholder</h2>
-            <p>Description Placeholder.</p>
-        </div>,
-        <div key="3" className="h-[300px] p-4 flex flex-col justify-center items-center bg-white rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold">Place 3:Placeholder</h2>
-            <p>Description placeholder.</p>
-        </div>,
-        // Add more cards as needed
-    ];
-
     const nextSlide = () => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % cards.length);
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % spaces.length);
     };
 
     const prevSlide = () => {
         setCurrentIndex((prevIndex) =>
-            prevIndex === 0 ? cards.length - 1 : prevIndex - 1
+            prevIndex === 0 ? spaces.length - 1 : prevIndex - 1
         );
+    };
+
+    const goToSlide = (index) => {
+        setCurrentIndex(index);
     };
 
     return (
@@ -37,28 +25,40 @@ const Slider = () => {
                     className="flex transition-transform duration-500"
                     style={{ transform: `translateX(-${currentIndex * 100}%)` }}
                 >
-                    {cards.map((card, index) => (
-                        <div
-                            key={index}
-                            className="min-w-full h-[300px] p-4 flex justify-center items-center bg-white rounded-lg shadow-md"
-                        >
-                            {card}
+                    {spaces.map((space) => (
+                        <div key={space._id.$oid} className="min-w-full">
+                            <CarouselCard
+                                image={space.images[0].url}
+                                name={space.name}
+                                city={space.location.city}
+                                country={space.location.country}
+                                description={space.description}
+                            />
                         </div>
                     ))}
                 </div>
             </div>
             <button
                 onClick={prevSlide}
-                className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white bg-gray-700 p-2 rounded-full"
+                className="absolute left-[-50px] top-1/2 transform -translate-y-1/2 text-white bg-gray-700 p-2 rounded-full transition-transform duration-300 hover:scale-105"
             >
                 &lt;
             </button>
             <button
                 onClick={nextSlide}
-                className="absolute right-0 top-1/2 transform -translate-y-1/2 text-white bg-gray-700 p-2 rounded-full"
+                className="absolute right-[-50px] top-1/2 transform -translate-y-1/2 text-white bg-gray-700 p-2 rounded-full transition-transform duration-300 hover:scale-105"
             >
                 &gt;
             </button>
+            <div className='flex justify-center mt-4'>
+                {spaces.map((_, index)=>(
+                    <button 
+                        key={index}
+                        className={`w-3 h-3 mx-1 rounded-full ${currentIndex === index ? 'bg-gray-800' : 'bg-gray-400'}`}
+                        onClick={()=>goToSlide(index)}
+                    ></button>
+                ))}
+            </div>
         </div>
     );
 };

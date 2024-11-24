@@ -43,3 +43,13 @@ exports.getAllSpaces = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Get a space by ID
+exports.getSpaceById = async (id) => {
+    try {
+        const space = await Space.findById(id);
+        return space;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};

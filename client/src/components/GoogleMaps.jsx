@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
+import axios from '../axios';
 
 const GoogleMaps = ({ onSelectSpace }) => {
   const mapRef = useRef(null);
@@ -15,8 +15,8 @@ const GoogleMaps = ({ onSelectSpace }) => {
         const response = await axios.get('http://localhost:5000/api/spaces/');
         const data = response.data.map(space => ({
           ...space,
-          lat: parseFloat(space.location.lat), // Ensure lat is a number
-          lng: parseFloat(space.location.lng), // Ensure lng is a number
+          lat: parseFloat(space.location.lat),
+          lng: parseFloat(space.location.lng), 
         }));
         setSpaces(data);
       } catch (error) {

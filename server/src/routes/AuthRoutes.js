@@ -23,9 +23,7 @@ router.post("/", async (req, res) => {
         const token = user.generateAuthToken(); 
 
         // Set the token in a cookie
-        res.cookie('token', token, { httpOnly: true, secure: false });
-
-        // Redirect after setting the cookie
+        res.cookie('token', token, { httpOnly: true, secure: false, path: "/" });
         return res.redirect('/');
 
     } catch (error) {
@@ -36,20 +34,42 @@ router.post("/", async (req, res) => {
 
 // Profile route
 router.get("/profile", verifyToken, async (req, res) => {
-    const userProfile = await User.findById(req.user._id);
-    if (!userProfile) {
-        console.error("User not found:", req.user._id); // Log user not found
-        return res.status(404).send({ message: "User not found." });
-    }
-
-    res.send({
-        message: "Welcome to your profile!",
-        user: {
-            firstName: userProfile.firstName,
-            lastName: userProfile.lastName
+    try {
+        // Fetch user data from the database
+        const userProfile = await User.findById(req.user._id);
+        if (!userProfile) {
+            console.error("User not found:", req.user._id);
+            return res.status(404).send({ message: "User not found." });
         }
-    });
+
+        // Set user profile data in a cookie
+        res.cookie(
+            "userProfile",
+            JSON.stringify({
+                email: userProfile.email,
+                userId: userProfile._id,
+                firstName: userProfile.firstName,
+                lastName: userProfile.lastName,
+            }),
+            { secure: false }
+        );
+
+        // Send the profile data as part of the response as well (optional)
+        res.send({
+            message: "Welcome to your profile!",
+            user: {
+                email: userProfile.email,
+                userId: userProfile._id,
+                firstName: userProfile.firstName,
+                lastName: userProfile.lastName,
+            },
+        });
+    } catch (error) {
+        console.error("Error fetching profile:", error);
+        res.status(500).send({ message: "Internal Server Error" });
+    }
 });
+
 
 // Validation function
 const validate = (data) => {
@@ -62,11 +82,9 @@ const validate = (data) => {
 
 // Log Out Routes
 router.post("/logout", (req, res) => {
-    // Clear the cookie by setting it with an expired date
-    res.clearCookie("token"); 
-
-    // Send a response indicating the user has logged out
-    res.send({ message: "Logged out successfully" });
+    res.clearCookie("token", { httpOnly: true, secure: false });
+    res.clearCookie("userProfile", { httpOnly: true, secure: false });
+    return res.send({ message: "Logged out successfully" });
 });
 
 module.exports = router;

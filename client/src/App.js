@@ -4,8 +4,10 @@ import Login from './components/Login.jsx';
 import Signup from './components/Signup.jsx';
 import Home from './components/Home';
 import Loader from './components/Loader/Loader.jsx'; 
-import './App.css';
 import FindPage from './components/FindPage.jsx';
+import SpacePage from './components/SpacePage.jsx';
+import BookingReceipt from './components/BookingReceipt.jsx';
+import './App.css';
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -13,12 +15,28 @@ function App() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const authState = localStorage.getItem('token');
-        if (authState) {
-            setIsAuthenticated(true);
-        }
-        setIsLoading(false);
-    }, []);
+        const checkAuth = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/profile', {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+
+                if (response.ok) {
+                    setIsAuthenticated(true);
+                } else {
+                    setIsAuthenticated(false);
+                }
+            } catch (err) {
+                console.error('Authentication check failed:', err);
+                setIsAuthenticated(false);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        checkAuth();
+    }, [navigate]);
 
     const handleLoginSuccess = () => {
         setIsAuthenticated(true);
@@ -33,21 +51,17 @@ function App() {
         <div className="justify-start font-sans font-semibold">
             <Routes>
                 <Route path="/" element={<Login onLoginSuccess={handleLoginSuccess} />} />
-                <Route path="/register" element={<Signup />} />
-                <Route path="/app" element={
-                    isAuthenticated ? (
-                        <Home />
-                    ) : (
-                        <Login onLoginSuccess={handleLoginSuccess} />
-                    )
-                } />
-                <Route path="/search" element={
-                    isAuthenticated ? (
-                        <FindPage />
-                    ) : (
-                        <Login onLoginSuccess={handleLoginSuccess} />
-                    )
-                } />
+                <Route path="/signup" element={<Signup />} />
+                {isAuthenticated ? (
+                    <>
+                        <Route path="/app" element={<Home />} />
+                        <Route path="/search" element={<FindPage />} />
+                        <Route path="/spaces/:_id" element={<SpacePage />} />
+                        <Route path="/booking-receipt/:_Id" element={<BookingReceipt />} />
+                    </>
+                ) : (
+                    <Route path="*" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+                )}
             </Routes>
         </div>
     );

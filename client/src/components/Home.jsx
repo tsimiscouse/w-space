@@ -1,10 +1,17 @@
+import React, { useState, useEffect } from "react";
 import Navbar from './Navbar';
 import Footer from './Footer';
 import DropdownCity from './DropdownCity';
 import DropdownType from './DropdownType';
-import { useState, useEffect } from 'react';
+import Section from './Section';
+import SpaceCarousel from './SpaceCarousel';
+import { useNavigate } from 'react-router-dom';
 import './Home.css';
-import Slider from './Slider';
+import cws1 from '../assets/cws-section-1.jpg';
+import cws2 from '../assets/cws-section-2.jpg';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import axios from "axios";
 
 const words = ["Space.", "Place.", "Room.", "Spot."];
 
@@ -12,9 +19,26 @@ const Home = () => {
     const [selectedCity, setSelectedCity] = useState("Select a City");
     const [selectedSpaceType, setSelectedSpaceType] = useState("Select a Space Type");
     const [currentWord, setCurrentWord] = useState("");
+    const [spaces, setSpaces] = useState([]); // Stores the space data
     const [isDeleting, setIsDeleting] = useState(false);
     const [wordIndex, setWordIndex] = useState(0);
     const [charIndex, setCharIndex] = useState(0);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        // Fetch spaces from your backend API (MongoDB)
+        const fetchSpaces = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/spaces'); // Adjust URL as necessary
+                setSpaces(response.data); // Set the spaces in state
+            } catch (error) {
+                console.error("Error fetching spaces:", error);
+            }
+        };
+
+        fetchSpaces();
+    }, []);
 
     useEffect(() => {
         const typingInterval = setInterval(() => {
@@ -41,9 +65,12 @@ const Home = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Selected City:", selectedCity);
-        console.log("Selected Space Type:", selectedSpaceType);
+        navigate(`/search?query=city=${encodeURIComponent(selectedCity)}&type=${encodeURIComponent(selectedSpaceType)}`); 
     };
+
+    useEffect(() => {
+        AOS.init({ duration: 2000 });
+    }, []);
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -59,7 +86,7 @@ const Home = () => {
                         </h1>
                     </div>
                     <div className="w-2/3 flex items-center justify-center space-x-4">
-                        <div className='px-[80px] py-[60px] bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 border-2 border-gray-100 flex gap-5 animate-fadeInScale  '>
+                        <div className='px-[80px] py-[60px] bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 border-2 border-gray-100 flex gap-5 animate-fadeInScale'>
                             <DropdownCity setSelectedCity={setSelectedCity} />
                             <DropdownType setSelectedSpaceType={setSelectedSpaceType} />
                             <button 
@@ -72,12 +99,35 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            <div className="pb-5">
-                <Slider />
+            <div className='min-h-[1080px] px-[40px]'>
+                <div className="absolute left-[100px] w-[500px] h-[400px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
+                {/* Section 1 */}
+                <div data-aos="fade-left">
+                    <Section
+                        image={cws1}
+                        title="Unlock Your Ideal Workspace"
+                        description="Whether you're a startup or an established company, we provide the perfect space for your team. Discover flexible memberships and fully equipped offices that adapt to your needs, empowering your productivity."
+                        link="#"
+                    />    
+                </div>          
+                <div className="absolute right-[100px] w-[500px] h-[400px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
+                {/* Section 2 */}
+                <div data-aos="fade-right">
+                    <Section
+                        image={cws2}
+                        title="Future-Ready Workspaces for Your Hybrid Workforce"
+                        description="Transform your real estate strategy with scalable office solutions that blend flexibility and cost-efficiency. From coworking spaces to turnkey offices, we’ve got everything you need to power your hybrid work model."
+                        link="#"
+                        reverse={true}
+                        data-aos="fade-right"
+                    />
+                </div>
+
+                <div className="py-12 mb-12" data-aos="fade-up">
+                    <SpaceCarousel />
+                </div>
             </div>
-            <div className="mt-5">
-                <Footer />
-            </div>
+            <Footer />
         </div>
     );
 };
