@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import axios from "axios";
+import axios from "../axios";
 import { Link, useNavigate } from "react-router-dom";
 import { FaBars, FaUserCircle } from "react-icons/fa"; 
 import Logo from '../assets/Logo.jpg';
@@ -40,9 +40,16 @@ const Navbar = () => {
 
     const handleLogout = async () => {
         try {
-            await axios.post("http://localhost:5000/api/auth/logout", { withCredentials: true });
-            Cookies.remove("token");          
-            localStorage.removeItem("token"); 
+            // Call logout API to clear the token server-side
+            await axios.post("http://localhost:5000/api/auth/logout", {}, { withCredentials: true });
+    
+            // Clear the cookie from the client-side
+            Cookies.remove("token", { path: "/" });  
+    
+            // Clear any other token storage 
+            localStorage.removeItem("token");
+    
+            // Redirect to the login page
             navigate("/");                    
         } catch (error) {
             console.error("Logout error:", error);

@@ -5,12 +5,12 @@ const formatPrice = (price) => {
   return new Intl.NumberFormat('en-ID', { style: 'currency', currency: 'IDR' }).format(price);
 };
 
-const Card = ({ id, name, location, category, description, image, price }) => {
+const Card = ({ _id, name, location, category, description, image, price }) => {
   const navigate = useNavigate();
 
   // Navigate to the space detail page when card is clicked
   const handleClick = () => {
-    navigate(`/spaces/${id}`);
+    navigate(`/spaces/${_id}`);
   };
 
   return (
