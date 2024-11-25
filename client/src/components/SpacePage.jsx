@@ -168,7 +168,7 @@ const SpacePage = () => {
 
   const checkSpaceAvailability = async (bookingDate, startTime, endTime) => {
     try {
-      const response = await axios.get('http://localhost:5000/api/spaces/check-availability', {
+      const response = await axios.get('http://localhost:5000/api/bookings/check-availability', {
         params: {
           spaceId: _id,
           date: bookingDate,
