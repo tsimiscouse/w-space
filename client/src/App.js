@@ -1,12 +1,14 @@
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Login from './components/Login.jsx';
 import Signup from './components/Signup.jsx';
 import Home from './components/Home';
-import Loader from './components/Loader/Loader.jsx'; 
+import Loader from './components/Loader/Loader.jsx';
 import FindPage from './components/FindPage.jsx';
 import SpacePage from './components/SpacePage.jsx';
 import BookingReceipt from './components/BookingReceipt.jsx';
+import ContactUs from './components/ContactUs.jsx';
+import Setting from './components/Setting.jsx';
 import './App.css';
 
 function App() {
@@ -40,7 +42,7 @@ function App() {
 
     const handleLoginSuccess = () => {
         setIsAuthenticated(true);
-        navigate('/app'); 
+        navigate('/app');
     };
 
     if (isLoading) {
@@ -57,7 +59,10 @@ function App() {
                         <Route path="/app" element={<Home />} />
                         <Route path="/search" element={<FindPage />} />
                         <Route path="/spaces/:_id" element={<SpacePage />} />
-                        <Route path="/booking-receipt/:_Id" element={<BookingReceipt />} />
+                        <Route path="/booking-receipt/:_id" element={<BookingReceipt />} />
+                        <Route path="/contact-us" element={<ContactUs />} />
+                        <Route path="/setting" element={<Setting />} />
+                        <Route path="*" element={<Navigate to="/app" replace />} /> {/* Redirect unknown paths */}
                     </>
                 ) : (
                     <Route path="*" element={<Login onLoginSuccess={handleLoginSuccess} />} />
