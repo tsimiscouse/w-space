@@ -3,6 +3,8 @@ const nodemailer = require('nodemailer');
 // Konfigurasi SMTP
 const transporter = nodemailer.createTransport({
   service: 'gmail',
+  host :"smtp.gmail.com",
+  port : 587,
   auth: {
     user: process.env.EMAIL_SENDER, // Alamat email pengirim
     pass: process.env.EMAIL_SENDER_PASS  // Password aplikasi email
@@ -11,7 +13,7 @@ const transporter = nodemailer.createTransport({
 
   const sendConfirmationEmail = async (toEmail, bookingDetails) => {
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: process.env.EMAIL_SENDER,
       to: toEmail,
       subject: 'Konfirmasi Booking Anda',
       html: `

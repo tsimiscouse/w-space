@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const Booking = require('../models/BookingModels');
 const Space = require('../models/SpaceModels');
+const { sendConfirmationEmail } = require('./SendEmailControllers');
 
 
 exports.authenticateUser = async (req, res, next) => {
@@ -21,7 +22,7 @@ exports.authenticateUser = async (req, res, next) => {
       decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = decoded;
     }
-
+    
     next();
   } catch (error) {
     console.error(error);
@@ -77,7 +78,18 @@ exports.createBooking = async (req, res) => {
     });
 
     const savedBooking = await newBooking.save();
+
+    const toEmail = req.user.email; // Pastikan email tersedia di req.user
+    const emailDetails = {
+      date: bookingDetails.date,
+      startTime: bookingDetails.startTime,
+      endTime: bookingDetails.endTime,
+      spaceName: space.name || 'N/A', // Nama ruang
+    };
+    await sendConfirmationEmail(toEmail, emailDetails);
     res.status(201).json(savedBooking);
+
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error creating booking' });
