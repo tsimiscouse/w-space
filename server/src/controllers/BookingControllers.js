@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const Booking = require('../models/BookingModels');
 const Space = require('../models/SpaceModels');
+const { sendConfirmationEmail } = require('./SendEmailControllers');
+
 
 exports.authenticateUser = async (req, res, next) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
@@ -20,7 +22,7 @@ exports.authenticateUser = async (req, res, next) => {
       decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = decoded;
     }
-
+    
     next();
   } catch (error) {
     console.error(error);
@@ -31,8 +33,9 @@ exports.authenticateUser = async (req, res, next) => {
 exports.createBooking = async (req, res) => {
   const { spaceId, userId, bookingDetails } = req.body;
 
-  if (!bookingDetails || !bookingDetails.date || !bookingDetails.startTime || !bookingDetails.endTime) {
-    return res.status(400).json({ message: 'Missing booking details' });
+  if (!bookingDetails || !bookingDetails.date || !bookingDetails.startTime || !bookingDetails.endTime || 
+      !bookingDetails.fullName || !bookingDetails.email || !bookingDetails.phone) {
+    return res.status(400).json({ message: 'Missing required booking details' });
   }
 
   const finalUserId = userId || req.user?.id;
@@ -51,9 +54,12 @@ exports.createBooking = async (req, res) => {
       return res.status(404).json({ message: 'Space not found' });
     }
 
+    // Convert date string to Date object
+    const bookingDate = new Date(bookingDetails.date);
+
     const existingBooking = await Booking.findOne({
       spaceId: spaceId,
-      'bookingDetails.date': bookingDetails.date,
+      'bookingDetails.date': bookingDate,
       $or: [
         {
           $and: [
@@ -67,19 +73,34 @@ exports.createBooking = async (req, res) => {
     if (existingBooking) {
       return res.status(400).json({ message: 'The space is already booked for the selected time' });
     }
-    
 
     const newBooking = new Booking({
       spaceId: spaceId,
       userId: finalUserId,
-      bookingDetails
+      bookingDetails: {
+        ...bookingDetails,
+        date: bookingDate // Ensure date is stored as Date object
+      }
     });
 
     const savedBooking = await newBooking.save();
+
+    const emailDetails = {
+      date: bookingDetails.date,
+      startTime: bookingDetails.startTime,
+      endTime: bookingDetails.endTime,
+      spaceName: space.name || 'N/A',
+      fullName: bookingDetails.fullName,
+      email: bookingDetails.email,
+      phone: bookingDetails.phone
+    };
+
+    await sendConfirmationEmail(bookingDetails.email, emailDetails);
     res.status(201).json(savedBooking);
+
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Error creating booking' });
+    res.status(500).json({ message: 'Error creating booking', error: error.message });
   }
 };
 
@@ -98,5 +119,52 @@ exports.getBookingById = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error fetching booking details' });
+  }
+};
+
+// Get all bookings for a user
+exports.getUserBookings = async (req, res) => {
+  const userId = req.user?.id; // Ensure user is authenticated
+  if (!userId) {
+    return res.status(400).json({ message: 'User authentication required' });
+  }
+
+  try {
+    // Fetch all bookings for the authenticated user
+    const bookings = await Booking.find({ userId })
+      .populate('spaceId') // Populate related space information
+      .populate('userId'); // Populate related user information
+    
+    if (!bookings.length) {
+      return res.status(404).json({ message: 'No bookings found for this user' });
+    }
+
+    res.status(200).json(bookings);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching bookings' });
+  }
+};
+
+// Optionally, you could add a route to delete a booking or update booking details
+exports.deleteBooking = async (req, res) => {
+  const { bookingId } = req.params;
+
+  try {
+    const booking = await Booking.findById(bookingId);
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+
+    // Only allow deletion if the user is the one who made the booking
+    if (booking.userId.toString() !== req.user?.id) {
+      return res.status(403).json({ message: 'You are not authorized to delete this booking' });
+    }
+
+    await booking.deleteOne();
+    res.status(200).json({ message: 'Booking deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error deleting booking' });
   }
 };

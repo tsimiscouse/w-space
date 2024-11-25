@@ -6,7 +6,7 @@ import Footer from './Footer';
 import Loader from './Loader/Loader';
 import { FaArrowLeft, FaArrowRight, FaWifi, FaParking, 
          FaRestroom, FaChair, FaProjectDiagram, FaCoffee, FaAccessibleIcon, 
-         FaAirFreshener, FaVolumeUp, FaTint, FaPrint} from 'react-icons/fa';
+         FaAirFreshener, FaVolumeUp, FaTint, FaPrint, FaStar, FaStarHalfAlt, FaRegStar} from 'react-icons/fa';
 
 // Map the amenities to their respective icons
 const amenityIcons = {
@@ -23,6 +23,32 @@ const amenityIcons = {
   'Printer and Scanner': FaPrint,
 };
 
+
+const renderStars = (ratings) => {
+  const stars = [];
+  const fullStars = Math.floor(ratings); // Number of full stars
+  const hasHalfStar = ratings % 1 >= 0.5; // Half star if the decimal is 0.5 or more
+  const totalStars = hasHalfStar ? fullStars + 1 : fullStars; // Full + Half stars
+  const emptyStars = 5 - totalStars; // Remaining stars to complete 5
+
+  // Add full stars
+  for (let i = 0; i < fullStars; i++) {
+    stars.push(<FaStar key={`full-${i}`} className="text-yellow-500" />);
+  }
+
+  // Add half star if applicable
+  if (hasHalfStar) {
+    stars.push(<FaStarHalfAlt key="half" className="text-yellow-500" />);
+  }
+
+  // Add empty stars
+  for (let i = 0; i < emptyStars; i++) {
+    stars.push(<FaRegStar key={`empty-${i}`} className="text-gray-300" />);
+  }
+
+  return stars;
+};
+
 const SpacePage = () => {
   const { _id } = useParams();
   const navigate = useNavigate();
@@ -35,7 +61,7 @@ const SpacePage = () => {
   const [endTime, setEndTime] = useState('');
   const [bookingDate, setBookingDate] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  
   useEffect(() => {
     const fetchSpaceDetails = async () => {
       try {
@@ -110,6 +136,12 @@ const SpacePage = () => {
       return;
     }
 
+    const spaceAvailabilityCheck = await checkSpaceAvailability(bookingDate, startTime, endTime);
+    if (!spaceAvailabilityCheck.available) {
+      alert('The space is already booked for the selected time');
+      return;
+    }
+
     const bookingData = {
       spaceId: _id,
       userId: userId,
@@ -131,6 +163,25 @@ const SpacePage = () => {
     } catch (error) {
       console.error('Error booking space:', error);
       alert('There was an error processing your booking.');
+    }
+  };
+
+  const checkSpaceAvailability = async (bookingDate, startTime, endTime) => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/bookings/check-availability', {
+        params: {
+          spaceId: _id,
+          date: bookingDate,
+          startTime,
+          endTime,
+        },
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error checking space availability:', error);
+      alert('There was an error checking space availability.');
+      return { available: false }; 
     }
   };
 
@@ -200,10 +251,11 @@ const SpacePage = () => {
                   <p className='text-black'>{space.capacity} people</p>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="font-semibold">Availability</p>
-                  <p className={space.availability ? 'text-green-600' : 'text-red-600'}>
-                    {space.availability ? 'Available' : 'Unavailable'}
-                  </p>
+                  <p className="font-semibold">Ratings</p>
+                  <div className="flex items-center">
+                    {renderStars(space.ratings)}
+                    <span className="ml-2 text-gray-700">{space.ratings?.toFixed(1) || "0.0"}</span>
+                  </div>
                 </div>
               </div>
             </div>

@@ -14,6 +14,7 @@ import axios from 'axios';
 import 'aos/dist/aos.css';
 import WhyChooseUs from "./WhyChooseUs";
 
+
 const words = ["Space.", "Place.", "Room.", "Spot."];
 
 const Home = () => {
