@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const Booking = require('../models/BookingModels');
 const Space = require('../models/SpaceModels');
 
+
 exports.authenticateUser = async (req, res, next) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
   const userProfile = req.cookies.userProfile;
