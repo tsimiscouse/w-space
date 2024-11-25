@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { registerUser, loginUser, getUserProfile, updateUserProfile, deleteUserAccount } = require("../controllers/UserControllers");
-const authMiddleware = require("../middleware/authMiddleware"); // Middleware to protect routes
+const authMiddleware = require("../middleware/AuthMiddleware"); // Middleware to protect routes
 
 // User Registration
 router.post("/register", async (req, res) => {

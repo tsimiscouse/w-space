@@ -3,7 +3,7 @@ const { User } = require("../models/UserModels");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
-const verifyToken = require("../middleware/AuthMiddleware");
+const verifyToken = require("../middleware/AuthMiddleware")
 
 // Login route
 router.post("/", async (req, res) => {
