@@ -1,4 +1,3 @@
-// SpaceModels.js
 const mongoose = require('mongoose');
 
 const spaceSchema = new mongoose.Schema({
@@ -78,5 +77,21 @@ const spaceSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+
+// Method to check if the space is available for a given time range
+spaceSchema.methods.checkAvailability = async function (startTime, endTime) {
+    // Query for any bookings that overlap with the requested time range
+    const overlappingBooking = await this.model('Space').findOne({
+        _id: this._id,
+        "bookings.startDate": { $lt: endTime },
+        "bookings.endDate": { $gt: startTime }
+    });
+
+    if (overlappingBooking) {
+        return false; // Space is not available
+    }
+
+    return true; // No overlap, space is available
+};
 
 module.exports = mongoose.model('Space', spaceSchema);

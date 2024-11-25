@@ -28,7 +28,6 @@ const getNearestSpaces = (spaces, userLocation) => {
   // Sort spaces by distance and return the first 3
   return spacesWithDistance
     .sort((a, b) => a.distance - b.distance)
-    .slice(0, 3);
 };
 
 const FindPage = () => {

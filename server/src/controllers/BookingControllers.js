@@ -100,3 +100,50 @@ exports.getBookingById = async (req, res) => {
     res.status(500).json({ message: 'Error fetching booking details' });
   }
 };
+
+// Get all bookings for a user
+exports.getUserBookings = async (req, res) => {
+  const userId = req.user?.id; // Ensure user is authenticated
+  if (!userId) {
+    return res.status(400).json({ message: 'User authentication required' });
+  }
+
+  try {
+    // Fetch all bookings for the authenticated user
+    const bookings = await Booking.find({ userId })
+      .populate('spaceId') // Populate related space information
+      .populate('userId'); // Populate related user information
+    
+    if (!bookings.length) {
+      return res.status(404).json({ message: 'No bookings found for this user' });
+    }
+
+    res.status(200).json(bookings);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching bookings' });
+  }
+};
+
+// Optionally, you could add a route to delete a booking or update booking details
+exports.deleteBooking = async (req, res) => {
+  const { bookingId } = req.params;
+
+  try {
+    const booking = await Booking.findById(bookingId);
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+
+    // Only allow deletion if the user is the one who made the booking
+    if (booking.userId.toString() !== req.user?.id) {
+      return res.status(403).json({ message: 'You are not authorized to delete this booking' });
+    }
+
+    await booking.deleteOne();
+    res.status(200).json({ message: 'Booking deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error deleting booking' });
+  }
+};
