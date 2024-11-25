@@ -10,8 +10,11 @@ import './Home.css';
 import cws1 from '../assets/cws-section-1.jpg';
 import cws2 from '../assets/cws-section-2.jpg';
 import AOS from 'aos';
+import axios from 'axios';
 import 'aos/dist/aos.css';
 import axios from "axios";
+import WhyChooseUs from "./WhyChooseUs";
+
 
 const words = ["Space.", "Place.", "Room.", "Spot."];
 
@@ -121,6 +124,10 @@ const Home = () => {
                         reverse={true}
                         data-aos="fade-right"
                     />
+                </div>
+
+                <div className="justify-center" data-aos="fade-up">
+                    <WhyChooseUs />
                 </div>
 
                 <div className="py-12 mb-12" data-aos="fade-up">
