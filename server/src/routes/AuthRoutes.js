@@ -33,9 +33,9 @@ router.post("/", async (req, res) => {
 });
 
 // Profile route
-router.get("/profile", verifyToken, async (req, res) => {
-    try {
-        // Fetch user data from the database
+/**router.get("/profile", verifyToken, async (req, res) => {
+        try {
+    // Fetch user data from the database
         const userProfile = await User.findById(req.user._id);
         if (!userProfile) {
             console.error("User not found:", req.user._id);
@@ -68,7 +68,7 @@ router.get("/profile", verifyToken, async (req, res) => {
         console.error("Error fetching profile:", error);
         res.status(500).send({ message: "Internal Server Error" });
     }
-});
+});**/
 
 
 // Validation function

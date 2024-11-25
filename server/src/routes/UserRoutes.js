@@ -13,18 +13,18 @@ router.post("/login", async (req, res) => {
 });
 
 // Get User Profile (Protected)
-router.get("/profile", authMiddleware, async (req, res) => {
-    await getUserProfile(req, res);
-});
+//router.get("/profile", authMiddleware, async (req, res) => {
+//    await getUserProfile(req, res);
+//});
 
 // Update User Profile (Protected)
-router.put("/profile", authMiddleware, async (req, res) => {
-    await updateUserProfile(req, res);
-});
+//router.put("/profile", authMiddleware, async (req, res) => {
+//    await updateUserProfile(req, res);
+//});
 
 // Delete User Account (Protected)
-router.delete("/profile", authMiddleware, async (req, res) => {
-    await deleteUserAccount(req, res);
-});
+//router.delete("/profile", authMiddleware, async (req, res) => {
+//    await deleteUserAccount(req, res);
+//});
 
 module.exports = router;

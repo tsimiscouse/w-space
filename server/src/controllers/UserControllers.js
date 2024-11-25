@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const { User, validateUser, validateProfileUpdate } = require("../src/models/UserModels");
+const { User, validateUser, validateProfileUpdate } = require("../models/UserModels");
 
 // Register a new user
 const registerUser = async (req, res) => {
