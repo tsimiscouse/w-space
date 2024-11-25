@@ -12,7 +12,9 @@ import cws2 from '../assets/cws-section-2.jpg';
 import AOS from 'aos';
 import axios from 'axios';
 import 'aos/dist/aos.css';
+import axios from "axios";
 import WhyChooseUs from "./WhyChooseUs";
+
 
 const words = ["Space.", "Place.", "Room.", "Spot."];
 
