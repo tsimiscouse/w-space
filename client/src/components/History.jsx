@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Navbar from './Navbar';
 
 const BookingHistory = () => {
   const [bookings, setBookings] = useState([]);
@@ -47,7 +48,8 @@ const BookingHistory = () => {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-2xl font-bold mb-4 heading">All Booking History</h1>
+      <Navbar />
+      <h1 className="text-2xl mt-[100px] font-bold mb-4 heading">All Booking History</h1>
 
       {/* SpaceId Filter */}
       <div className="mb-6">
