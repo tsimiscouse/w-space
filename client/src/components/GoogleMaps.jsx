@@ -32,6 +32,7 @@ const GoogleMaps = ({ onSelectSpace }) => {
     const script = document.createElement('script');
     script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBCEuYE1K305HMaIW2BSbx-76rNMxOl8YU&libraries=places`;
     script.async = true;
+    script.defer = true;
     document.body.appendChild(script);
 
     script.onload = () => {

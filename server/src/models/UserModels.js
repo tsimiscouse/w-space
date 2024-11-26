@@ -18,10 +18,17 @@ const userSchema = new mongoose.Schema({
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user',
+      },
 });
 
 userSchema.methods.generateAuthToken = function () {
-    const token = jwt.sign({ _id: this._id }, process.env.JWTPRIVATEKEY, {
+    const token = jwt.sign(
+        { _id: this._id, role: this.role }, 
+        process.env.JWTPRIVATEKEY, {
         expiresIn: "1d",
     });
     return token;

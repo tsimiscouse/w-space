@@ -23,7 +23,15 @@ const bookingSchema = new mongoose.Schema({
         endTime: {
             type: String,
             required: true
-        }
+        },
+        email: {
+            type: String,
+            required: true,
+        },
+        phone: {
+            type: String,
+            required: true,
+        },
     },
     status: {
         type: String,
