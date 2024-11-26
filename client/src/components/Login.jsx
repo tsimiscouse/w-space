@@ -24,7 +24,7 @@ const Login = ({ onLoginSuccess }) => {
         setLoading(true);
         setError("");
         try {
-            const url = "http://localhost:5000/api/auth"; 
+            const url = `${process.env.REACT_APP_API_URL}/api/auth`; 
             await axios.post(url, data, { withCredentials: true });
             if (rememberMe) {
                 localStorage.setItem("email", data.email);

@@ -22,7 +22,7 @@ const Signup = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const url = "http://localhost:5000/api/users";
+            const url = `${process.env.REACT_APP_API_URL}/api/users`;
             const { data: res } = await axios.post(url, data);
             navigate("/");
             console.log(res.message);

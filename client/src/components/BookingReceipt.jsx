@@ -14,7 +14,7 @@ const BookingReceipt = () => {
   useEffect(() => {
     const fetchBookingDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/bookings/${_Id}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/bookings/${_Id}`);
         setBooking(response.data);
         setLoading(false);
       } catch (error) {

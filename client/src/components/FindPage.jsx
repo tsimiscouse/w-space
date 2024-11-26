@@ -52,7 +52,7 @@ const FindPage = () => {
   useEffect(() => {
     const fetchSpaces = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/spaces'); // Fetch all spaces
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/spaces`); // Fetch all spaces
         setSpaces(response.data);
         
         // For mobile, limit to 10 closest spaces
@@ -88,7 +88,7 @@ const FindPage = () => {
   useEffect(() => {
     const fetchSpacesByQuery = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/spaces/search', {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/spaces/search`, {
           params: { query },
         });
         
@@ -137,7 +137,7 @@ const FindPage = () => {
     if (!query) {
       setQuery(''); 
       setSelectedSpace(null); 
-      const response = await axios.get('http://localhost:5000/api/spaces'); 
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/spaces`); 
       setSpaces(response.data);
       
       // For mobile, limit to 10 closest spaces

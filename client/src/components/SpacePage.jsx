@@ -70,7 +70,7 @@ const SpacePage = () => {
   useEffect(() => {
     const fetchSpaceDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/spaces/${_id}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/spaces/${_id}`);
         setSpace(response.data);
         setLoading(false);
 
@@ -165,7 +165,7 @@ const SpacePage = () => {
     };
 
     try {
-      await axios.post('http://localhost:5000/api/bookings', bookingData, {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/bookings`, bookingData, {
         withCredentials: true,
       });
       setBookingConfirmationDetails(bookingData.bookingDetails);
@@ -178,7 +178,7 @@ const SpacePage = () => {
 
   const checkSpaceAvailability = async (bookingDate, startTime, endTime) => {
     try {
-      const response = await axios.get('http://localhost:5000/api/bookings/check-availability', {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/bookings/check-availability`, {
         params: {
           spaceId: _id,
           date: bookingDate,

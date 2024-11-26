@@ -15,7 +15,7 @@ const Navbar = () => {
 
     const fetchUserData = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/auth/profile", { withCredentials: true }); 
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/auth/profile`, { withCredentials: true }); 
             setFirstName(response.data.user.firstName);
         } catch (error) {
             console.error("Failed to fetch user data:", error);
@@ -41,7 +41,7 @@ const Navbar = () => {
 
     const handleLogout = async () => {
         try {
-            await axios.post("http://localhost:5000/api/auth/logout", {}, { withCredentials: true });
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/logout`, {}, { withCredentials: true });
             Cookies.remove("token", { path: "/" });
             localStorage.removeItem("token");
             navigate("/");

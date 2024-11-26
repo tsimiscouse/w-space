@@ -12,7 +12,7 @@ const GoogleMaps = ({ onSelectSpace }) => {
   useEffect(() => {
     const fetchSpaces = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/spaces/');
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/spaces/`);
         const data = response.data.map(space => ({
           ...space,
           lat: parseFloat(space.location.lat),
@@ -30,7 +30,7 @@ const GoogleMaps = ({ onSelectSpace }) => {
   // Load Google Maps and initialize map with user's current location
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBCEuYE1K305HMaIW2BSbx-76rNMxOl8YU&libraries=places`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&libraries=places`;
     script.async = true;
     script.defer = true;
     document.body.appendChild(script);
