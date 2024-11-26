@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "../axios";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from '../assets/Logo.jpg';
+import Loader from '../components/Loader/Loader'; 
 
 const Login = ({ onLoginSuccess }) => {
     const [data, setData] = useState({ email: "", password: "" });
@@ -31,7 +32,7 @@ const Login = ({ onLoginSuccess }) => {
                 localStorage.removeItem("email");
             }
             onLoginSuccess(); 
-            navigate("/app"); 
+            navigate('/app');
         } catch (error) {
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                 setError(error.response.data.message); 
@@ -50,15 +51,9 @@ const Login = ({ onLoginSuccess }) => {
             </div>
 
             {/* Login Form Section */}
-            <div className="w-1/2 flex items-center justify-center bg-transparent p-8">
+            <div className="w-1/2 flex items-center justify-center p-8">
                 {loading && (
-                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
-                        <div className="loader-wrapper">
-                            <span className="loader">
-                                <span className="loader-inner"></span>
-                            </span>
-                        </div>
-                    </div>
+                    <Loader />
                 )}
                 <div className="relative w-full max-w-lg flex flex-col">
                     <h1 className="text-6xl font-bold mb-[80px]">Creating better moment.</h1>

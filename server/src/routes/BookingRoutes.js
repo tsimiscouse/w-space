@@ -54,7 +54,7 @@ router.get('/check-availability', async (req, res) => {
 // Create a new booking
 router.post('/', bookingController.authenticateUser, bookingController.createBooking);
 
-// Get a booking by ID - This should come after specific routes
+// Get a booking by ID 
 router.get('/:_id', bookingController.getBookingById);
 
 // Get user bookings
@@ -62,5 +62,12 @@ router.get('/user/bookings', bookingController.authenticateUser, bookingControll
 
 // Delete a booking
 router.delete('/:bookingId', bookingController.authenticateUser, bookingController.deleteBooking);
+
+// Route to fetch all bookings or filter by spaceId
+router.get('/', bookingController.getAllBookings);
+
+// Update booking status
+router.patch('/:id/status', bookingController.updateBookingStatus);
+
 
 module.exports = router;

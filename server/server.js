@@ -33,6 +33,7 @@ const authRoutes = require("./src/routes/AuthRoutes");
 const spaceRoutes = require("./src/routes/SpaceRoutes");
 const bookingRoutes = require("./src/routes/BookingRoutes");
 const contactRoutes = require("./src/routes/ContactRoutes");
+const adminRoutes = require('./src/routes/AdminRoutes');
 
 // Use routes
 app.use("/api/users", userRoutes);
@@ -40,6 +41,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/spaces", spaceRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/contact", contactRoutes);
+
+// Admin Routes
+app.use('/api/admin', adminRoutes);
 
 // Basic route
 app.get("/", (req, res) => {

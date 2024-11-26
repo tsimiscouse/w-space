@@ -26,4 +26,24 @@ router.post("/", async (req, res) => {
 	}
 });
 
+router.get("/", async (req, res) => {
+	try {
+		// Fetch all users from the database
+		const users = await User.find();
+
+		// If no users are found, send a 404 response
+		if (!users || users.length === 0) {
+			return res.status(404).send({ message: "No users found" });
+		}
+
+		// Return the list of users with a 200 status
+		res.status(200).send(users);
+	} catch (error) {
+		// Catch any errors and return a 500 status
+		console.error("Error fetching users:", error.message || error);
+		res.status(500).send({ message: "Internal Server Error" });
+	}
+});
+
+
 module.exports = router;

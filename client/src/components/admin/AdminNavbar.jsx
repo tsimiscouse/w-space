@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
-import axios from "../axios";
+import axios from "../../axios";
 import { Link, useNavigate } from "react-router-dom";
 import { FaBars, FaUserCircle } from "react-icons/fa"; 
-import Logo from '../assets/Logo.jpg';
+import Logo from '../../assets/Logo.jpg';
 import Cookies from 'js-cookie';
-import './Navbar.css'; 
+import './AdminNavbar.css'; 
 
 const Navbar = () => {
     const [firstName, setFirstName] = useState("");
@@ -58,16 +58,16 @@ const Navbar = () => {
 
     return (
         <nav className="navbar-fixed bg-white p-4 flex justify-between items-center border-b-2 border-gray-300 font-bold">
-            <div className="flex items-center space-x-12 ml-[160px]">
+            <div className="flex items-center space-x-8 ml-[160px]">
                 <img src={Logo} alt="Logo" className="h-10" />
-                <div className="flex space-x-[60px] px-[30px]">
-                    <Link to="/app" className="relative hover-underline">Home</Link>
-                    <Link to="/search" className="relative hover-underline">Find a Space</Link>
-                    <Link to="/about-us" className="relative hover-underline">About Us</Link>
+                <div className="flex space-x-[50px] px-[30px]">
+                    <Link to="/admin" className="relative hover-underline">Home</Link>
+                    <Link to="/admin/spaces" className="relative hover-underline">Space</Link>
+                    <Link to="/admin/bookings" className="relative hover-underline">Booking</Link>
                 </div>
             </div>
 
-            <div className="relative mr-[80px]" ref={dropdownRef}>
+            <div className="relative mr-[50px]" ref={dropdownRef}>
                 <div className="flex items-center mr-5">
                     <div className="flex items-center mr-5">
                         <FaUserCircle className="text-[#191B1D] h-8 w-8" />

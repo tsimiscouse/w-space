@@ -5,6 +5,8 @@ import Footer from './Footer';
 import SpaceCard from './SpaceCard';
 import GoogleMaps from './GoogleMaps'; 
 import axios from '../axios';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 // Haversine formula to calculate distance between two points on the earth
 const getDistance = (lat1, lon1, lat2, lon2) => {
@@ -111,12 +113,16 @@ const FindPage = () => {
     }
   };
 
+  useEffect(() => {
+    AOS.init({ duration: 2000 });
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className="flex flex-grow mt-[83px]">
+      <div className="flex flex-grow mt-[83px] pb-12">
         <div className="w-1/2 p-4 flex flex-col">
-          <h1 className="text-2xl font-bold mb-4 mx-5 mt-2">Find Your Rental Space</h1>
+          <h1 className="text-2xl font-bold mb-4 mx-5 mt-2" data-aos="fade">Find Your Rental Space</h1>
           <div className="relative mx-4">
             <input
               type="text"
@@ -140,7 +146,7 @@ const FindPage = () => {
                 }
               `}
             </style>
-            <div className="p-4 space-y-4">
+            <div className="p-4 space-y-4" data-aos="fade">
               {selectedSpace ? (
                 <SpaceCard 
                   key={selectedSpace._id} 
@@ -166,7 +172,7 @@ const FindPage = () => {
             </div>
           </div>
         </div>
-        <div className="w-1/2 mr-[40px]">
+        <div className="w-1/2 mr-[40px]" data-aos="fade">
           <GoogleMaps spaces={filteredSpaces} onSelectSpace={handleSelectSpace} /> 
         </div>
       </div>

@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const { User, validateUser } = require("../src/models/user");
+const { User, validateUser } = require("../models/UserModels");
 
 const registerUser = async (req, res) => {
 	try {
@@ -45,6 +45,16 @@ const loginUser = async (req, res) => {
 	} catch (error) {
 		res.status(500).send("Something went wrong.");
 	}
+};
+
+// Controller for fetching all users
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find(); 
+    res.status(200).send(users);      
+  } catch (error) {
+    res.status(500).send("Failed to fetch users.");
+  }
 };
 
 module.exports = { registerUser, loginUser };

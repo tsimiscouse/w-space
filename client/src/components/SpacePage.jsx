@@ -7,6 +7,9 @@ import Loader from './Loader/Loader';
 import { FaArrowLeft, FaArrowRight, FaWifi, FaParking, 
          FaRestroom, FaChair, FaProjectDiagram, FaCoffee, FaAccessibleIcon, 
          FaAirFreshener, FaVolumeUp, FaTint, FaPrint, FaStar, FaStarHalfAlt, FaRegStar} from 'react-icons/fa';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import BookingConfirmationPopup from './BookingPopup';
 
 // Map the amenities to their respective icons
 const amenityIcons = {
@@ -61,6 +64,8 @@ const SpacePage = () => {
   const [endTime, setEndTime] = useState('');
   const [bookingDate, setBookingDate] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
+  const [bookingConfirmationDetails, setBookingConfirmationDetails] = useState(null);
   
   useEffect(() => {
     const fetchSpaceDetails = async () => {
@@ -104,6 +109,10 @@ const SpacePage = () => {
     checkGoogleMapsAPI();
 
   }, [_id]);
+
+  useEffect(() => {
+      AOS.init({ duration: 2000 });
+  }, []);
 
   const getUserId = () => {
     const cookies = document.cookie.split(';');
@@ -159,7 +168,8 @@ const SpacePage = () => {
       await axios.post('http://localhost:5000/api/bookings', bookingData, {
         withCredentials: true,
       });
-      navigate('/booking-receipt');
+      setBookingConfirmationDetails(bookingData.bookingDetails);
+      setShowConfirmationPopup(true);
     } catch (error) {
       console.error('Error booking space:', error);
       alert('There was an error processing your booking.');
@@ -201,16 +211,26 @@ const SpacePage = () => {
   if (loading) {
     return <Loader />;
   }
+  
+
+  
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <Navbar />
+      {showConfirmationPopup && (
+        <BookingConfirmationPopup 
+          isOpen={showConfirmationPopup}
+          onClose={() => setShowConfirmationPopup(false)}
+          bookingDetails={bookingConfirmationDetails}
+        />
+      )}
       
       {/* Main Content */}
       <div className="flex-grow mt-[83px] p-4 lg:p-6 mb-12">
         <div className="flex flex-col lg:flex-row gap-6 max-w-7xl mx-auto">
           {/* Left Column - Space Details */}
-          <div className="w-full lg:w-2/3 space-y-6">
+          <div className="w-full lg:w-2/3 space-y-6" data-aos="fade">
             {/* Header Section */}
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h1 className="text-3xl font-bold mb-4 text-gray-800">{space.name}</h1>
@@ -294,7 +314,7 @@ const SpacePage = () => {
 
           {/* Right Column - Booking Form */}
           <div className="w-full lg:w-1/3">
-            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24">
+            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24" data-aos="fade">
               <h2 className="text-2xl font-bold mb-6 text-gray-800">Book this Space</h2>
               
               <div className="space-y-4">
