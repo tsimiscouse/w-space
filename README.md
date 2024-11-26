@@ -13,16 +13,17 @@
 
 ## 📖 Deskripsi Proyek
 
-W-Space adalah aplikasi berbasis web untuk membantu pengguna menemukan dan menyewa shared spaces seperti coworking space, studio foto, ruang kreatif, atau tempat workshop. Proyek ini dirancang untuk memenuhi kebutuhan harian pengguna melalui platform yang intuitif dan fungsional.
+W-Space adalah aplikasi berbasis web untuk membantu pengguna menemukan dan menyewa shared spaces seperti coworking space, ruang meeting, dedicated space, atau private office. Proyek ini dirancang untuk memenuhi kebutuhan harian pengguna melalui platform yang intuitif dan fungsional.
 
-✨ Proyek ini menggunakan React.js dan Next.js untuk frontend serta backend berbasis Node.js dengan database MongoDB. Proyek ini juga mendukung fitur CRUD untuk ruang sewa dan fasilitas, dengan tambahan sistem real-time booking yang memudahkan pengguna dalam merencanakan penyewaan ruang mereka.
+✨ Proyek ini menggunakan React.js dan Next.js untuk frontend serta backend berbasis Node.js dengan database MongoDB. Proyek ini juga mendukung fitur CRUD untuk ruang sewa dan fasilitas, dengan tambahan sistem booking yang memudahkan pengguna dalam merencanakan penyewaan ruang mereka.
 
 ---
 
 ## 🛠 Teknologi yang Digunakan
-- **Frontend:** React.js & Next.js
+- **Frontend:** React.js 
 - **Backend:** Node.js, Express.js
 - **Database:** MongoDB
+- **CSS Framework** Tailwind CSS
 - **Authentication:** JWT
 
 ---
@@ -32,8 +33,9 @@ W-Space adalah aplikasi berbasis web untuk membantu pengguna menemukan dan menye
 - **CRUD:** Operasi Create, Read, Update, Delete untuk data ruang dan fasilitas.
 - **Booking Real-Time:** Sistem kalender untuk mengecek ketersediaan dan melakukan booking ruang.
 - **Search & Filter:** Cari ruang dengan filter berdasarkan lokasi, fasilitas, dan jenis ruang.
-- **Review & Rating:** Pengguna dapat memberikan ulasan dan rating untuk ruang yang disewa.
-- **Payment Gateway:** Sistem pembayaran untuk transaksi sewa yang aman dan mudah.
+- **Google Maps API**
+- **Admin Dashboard**
+- **Auto Email API**
 
 ---
 
@@ -113,7 +115,6 @@ w-space/
 │   ├── public/             # Static assets
 │   ├── src/
 │   │   ├── components/     # Komponen UI
-│   │   ├── pages/          # Halaman utama
 │   │   └── App.js          # Main component aplikasi frontend
 │   ├── .env                # Environment variables frontend
 │   ├── package.json        # Dependencies frontend
