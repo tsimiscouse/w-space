@@ -13,8 +13,14 @@ dotenv.config();
 const app = express();
 
 const corsOptions = {
-    origin: 'https://w-space-4tv1.vercel.app',
-    credentials: true,
+  origin: [
+    'https://w-space-4tv1.vercel.app', 
+    'http://localhost:3000',           
+    'https://w-space-server.vercel.app' 
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'credentials'],
+  credentials: true
 };
 
 // Middleware
