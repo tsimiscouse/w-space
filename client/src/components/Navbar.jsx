@@ -5,6 +5,7 @@ import { FaBars, FaUserCircle } from "react-icons/fa";
 import Logo from '../assets/Logo.jpg';
 import Cookies from 'js-cookie';
 import './Navbar.css'; 
+import api from '../axios';
 
 const Navbar = () => {
     const [firstName, setFirstName] = useState("");
@@ -15,7 +16,7 @@ const Navbar = () => {
 
     const fetchUserData = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/auth/profile`, { withCredentials: true }); 
+            const response = await api.get(`/auth/profile`); 
             setFirstName(response.data.user.firstName);
         } catch (error) {
             console.error("Failed to fetch user data:", error);
@@ -41,7 +42,7 @@ const Navbar = () => {
 
     const handleLogout = async () => {
         try {
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/logout`, {}, { withCredentials: true });
+            await api.post(`/auth/logout`);
             Cookies.remove("token", { path: "/" });
             localStorage.removeItem("token");
             navigate("/");

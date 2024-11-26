@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "../axios";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from '../assets/Logo.jpg';
+import api from '../axios';
 
 const Signup = () => {
     const [data, setData] = useState({
@@ -22,8 +23,7 @@ const Signup = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const url = `${process.env.REACT_APP_API_URL}/api/users`;
-            const { data: res } = await axios.post(url, data);
+            const { data: res } = await api.post(`/users`);
             navigate("/");
             console.log(res.message);
         } catch (error) {

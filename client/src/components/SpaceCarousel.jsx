@@ -4,6 +4,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Link, useNavigate } from "react-router-dom";
+import api from '../axios';
 
 // Utility function to format price
 const formatPrice = (price) => {
@@ -22,7 +23,7 @@ const SpaceCarousel = () => {
   useEffect(() => {
     const fetchSpaces = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/spaces`);
+        const response = await api.get(`/spaces`);
         setSpaces(response.data);
         setLoading(false);
       } catch (error) {

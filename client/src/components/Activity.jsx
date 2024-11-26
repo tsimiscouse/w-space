@@ -3,7 +3,7 @@ import Loader from './Loader/Loader';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import ActivityCard from './ActivityCard';
-import api from './path/to/axios'; 
+import api from '../axios'; 
 
 const Activity = () => {
   const [bookings, setBookings] = useState([]);

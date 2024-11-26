@@ -14,6 +14,7 @@ import axios from 'axios';
 import 'aos/dist/aos.css';
 import WhyChooseUs from "./WhyChooseUs";
 import Loader from './Loader/Loader'; 
+import api from '../axios';
 
 const words = ["Space.", "Place.", "Room.", "Spot."];
 
@@ -34,7 +35,7 @@ const Home = () => {
         const fetchSpaces = async () => {
             try {
                 setIsLoading(true); 
-                const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/spaces`, { timeout: 5000 }); 
+                const response = await api.get(`/spaces`, { timeout: 5000 }); 
                 setSpaces(response.data);
                 setIsLoading(false);
             } catch (error) {
