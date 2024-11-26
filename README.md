@@ -13,7 +13,8 @@
 
 ## 🔗 **Important Links**
 - 🌐 **W-Space Showcase**: [https://w-space.my.canva.site/](https://w-space.my.canva.site/)  
-- 📄 **Documentation & Demo**: [bit.ly/PAW16](https://bit.ly/PAW16)
+- 📄 **Documentation & Demo**: [bit.ly/PAW16](https://bit.ly/PAW16)  
+- 💻 **W-Space Web App**: [https://w-space-4tv1.vercel.app/](https://w-space-4tv1.vercel.app/)
 
 ---
 
@@ -52,8 +53,6 @@ Implementasi berfokus pada:
 
 ---
 
-## 📂 **Struktur Proyek**
-
 
 ## 📚 Frontend W-Space
 Frontend W-Space dirancang dengan tampilan yang user-friendly untuk memudahkan pengguna dalam melakukan booking ruang. Berikut adalah tampilan halaman utama:
@@ -67,7 +66,7 @@ Frontend W-Space dirancang dengan tampilan yang user-friendly untuk memudahkan p
 #### 📚 Booking Page
 <img src="https://github.com/tsimiscouse/w-space/blob/main/asset/BookingPage.png" alt="Booking Page" width='600'/>
 
-#### 📚 Contact Us Page
+#### 📞 Contact Us Page
 <img src="https://github.com/tsimiscouse/w-space/blob/main/asset/ContactUs.png" alt="Contact Us" width='600'/>
 
 Frontend ini dibangun menggunakan React.js untuk menampilkan konten secara dinamis. Pengguna dapat dengan mudah menambah, menghapus, dan mencari ruang secara real-time.
@@ -160,7 +159,9 @@ w-space/
 
 ## 📄 Dokumentasi dan Video Demo
 
-Untuk dokumentasi proyek dan video demo CRUD, silakan kunjungi link [bit.ly/PAW_16](bit.ly/PAW_16) atau click:
+Kunjungi link berikut untuk dokumentasi lengkap, video demo CRUD, dan aplikasi yang sudah di-deploy:
+- 📄 **Dokumentasi & Video Demo**: [bit.ly/PAW_16](https://bit.ly/PAW_16)  
+- 💻 **W-Space Web App**: [https://w-space-4tv1.vercel.app/](https://w-space-4tv1.vercel.app/)
 
 [![PAW16 Dokumentasi](https://img.shields.io/badge/Documentation-PAW_16-blue)](https://bit.ly/PAW_16)
 
