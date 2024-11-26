@@ -113,3 +113,52 @@ exports.getBookingById = async (req, res) => {
     res.status(500).json({ message: 'Error fetching booking details' });
   }
 };
+
+
+// Fungsi untuk mendapatkan riwayat booking
+exports.getBookingHistory = async (req, res) => {
+  try {
+    const userId = req.user.id; // Ambil user ID dari middleware authenticateUser
+    const { filter } = req.query; // Ambil filter (past atau upcoming) dari query parameter
+    const currentTime = new Date(); // Waktu saat ini
+
+    // Filter dasar untuk user yang sedang login
+    let query = { userId };
+
+    // Validasi filter, pastikan filter yang diterima valid
+    if (filter && !['past', 'upcoming', 'all'].includes(filter)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Filter tidak valid. Gunakan "past", "upcoming", atau "all".',
+      });
+    }
+
+    // Tambahkan kondisi berdasarkan filter
+    if (filter === 'past') {
+      query['bookingDetails.endTime'] = { $lt: currentTime }; // Booking selesai
+    } else if (filter === 'upcoming') {
+      query['bookingDetails.startTime'] = { $gt: currentTime }; // Booking mendatang
+    }
+    // Jika filter 'all', tidak perlu menambah kondisi apapun
+
+    // Cari booking berdasarkan query
+    const bookings = await Booking.find(query)
+      .sort({ 'bookingDetails.date': -1 }) // Urutkan berdasarkan tanggal terbaru
+      .populate('space', 'name') // Populate data ruang
+      .populate('user', 'fullName email'); // Populate data user
+
+    // Kembalikan response JSON
+    res.status(200).json({
+      success: true,
+      message: 'Riwayat booking berhasil diambil',
+      data: bookings,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Gagal mengambil riwayat booking',
+      error: error.message,
+    });
+  }
+};

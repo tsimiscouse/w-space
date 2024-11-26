@@ -1,38 +1,41 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const BookingHistory = () => {
   const [bookings, setBookings] = useState([]);
-  const [filter, setFilter] = useState("all"); // Filter: 'all', 'past', 'ongoing'
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [filter, setFilter] = useState('all'); // 'all', 'past', 'upcoming'
 
-  // Fetch bookings based on the filter
   useEffect(() => {
     fetchBookings();
-  }, [filter]);
+  }, [filter]); // Refetch bookings setiap kali filter berubah
 
+  // Fungsi untuk mengambil data booking dari backend
   const fetchBookings = async () => {
-    setLoading(true);
-    setError(null);
     try {
       const response = await axios.get("/api/history", {
-        params: { filter }, // Send filter as query param
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }, // Authorization token
+        params: { filter },
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }, // Mendapatkan token dari localStorage
       });
-      setBookings(response.data); // Store bookings data in state
-    } catch (err) {
-      console.error("Error fetching bookings:", err);
-      setError("Failed to fetch booking data. Please try again.");
-    } finally {
-      setLoading(false);
+      setBookings(response.data.data); // Ambil data booking dari response
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
     }
   };
 
-  // Helper to format date
-  const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+  // Menentukan status booking berdasarkan waktu
+  const getStatus = (startTime, endTime, date) => {
+    const currentTime = new Date();
+    const bookingDate = new Date(date);
+    const bookingStartTime = new Date(`${bookingDate.toISOString().split('T')[0]}T${startTime}`);
+    const bookingEndTime = new Date(`${bookingDate.toISOString().split('T')[0]}T${endTime}`);
+
+    if (bookingEndTime < currentTime) {
+      return 'Past';
+    } else if (bookingStartTime > currentTime) {
+      return 'Upcoming';
+    } else {
+      return 'Ongoing';
+    }
   };
 
   return (
@@ -42,78 +45,51 @@ const BookingHistory = () => {
       {/* Filter Buttons */}
       <div className="flex gap-4 mb-6">
         <button
-          onClick={() => setFilter("all")}
-          className={`px-4 py-2 rounded ${
-            filter === "all" ? "bg-blue-500 text-white" : "bg-gray-200"
-          }`}
+          onClick={() => setFilter('all')}
+          className={`px-4 py-2 rounded ${filter === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
         >
           Show All
         </button>
         <button
-          onClick={() => setFilter("past")}
-          className={`px-4 py-2 rounded ${
-            filter === "past" ? "bg-blue-500 text-white" : "bg-gray-200"
-          }`}
+          onClick={() => setFilter('past')}
+          className={`px-4 py-2 rounded ${filter === 'past' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
         >
           Past
         </button>
         <button
-          onClick={() => setFilter("ongoing")}
-          className={`px-4 py-2 rounded ${
-            filter === "ongoing" ? "bg-blue-500 text-white" : "bg-gray-200"
-          }`}
+          onClick={() => setFilter('upcoming')}
+          className={`px-4 py-2 rounded ${filter === 'upcoming' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
         >
-          Ongoing
+          Upcoming
         </button>
       </div>
 
-      {/* Error or Loading State */}
-      {loading && <p>Loading bookings...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-
       {/* Bookings Table */}
-      {!loading && bookings.length > 0 && (
-        <div className="bg-white shadow-md rounded">
-          <table className="min-w-full border-collapse">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="py-2 px-4 border">Email</th>
-                <th className="py-2 px-4 border">Date</th>
-                <th className="py-2 px-4 border">Time</th>
-                <th className="py-2 px-4 border">Status</th>
+      <div className="bg-white shadow-md rounded">
+        <table className="min-w-full border-collapse">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="py-2 px-4 border">Date</th>
+              <th className="py-2 px-4 border">Time</th>
+              <th className="py-2 px-4 border">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {bookings.map((booking) => (
+              <tr key={booking._id} className="hover:bg-gray-100">
+               
+                <td className="py-2 px-4 border">{booking.bookingDetails.date}</td>
+                <td className="py-2 px-4 border">
+                  {booking.bookingDetails.startTime} - {booking.bookingDetails.endTime}
+                </td>
+                <td className="py-2 px-4 border">
+                  {getStatus(booking.bookingDetails.startTime, booking.bookingDetails.endTime, booking.bookingDetails.date)}
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {bookings.map((booking) => (
-                <tr key={booking._id} className="hover:bg-gray-100">
-                  <td className="py-2 px-4 border">
-                    {booking.bookingDetails.fullName}
-                  </td>
-                  <td className="py-2 px-4 border">
-                    {booking.bookingDetails.email}
-                  </td>
-                  <td className="py-2 px-4 border">
-                    {formatDate(booking.bookingDetails.date)}
-                  </td>
-                  <td className="py-2 px-4 border">
-                    {booking.bookingDetails.startTime} -{" "}
-                    {booking.bookingDetails.endTime}
-                  </td>
-                  <td className="py-2 px-4 border">
-                    {new Date(booking.bookingDetails.date) <
-                    new Date() ? "Past" : "Ongoing"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {/* Empty State */}
-      {!loading && bookings.length === 0 && (
-        <p>No bookings found for the selected filter.</p>
-      )}
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

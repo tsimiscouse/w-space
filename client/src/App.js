@@ -59,7 +59,7 @@ function App() {
                         <Route path="/search" element={<FindPage />} />
                         <Route path="/spaces/:_id" element={<SpacePage />} />
                         <Route path="/booking-receipt/:_Id" element={<BookingReceipt />} />
-                        <Route path="/history" element={<BookingHistory/>}/>
+                        <Route path="/app/history" element={<BookingHistory/>}/>
                     </>
                 ) : (
                     <Route path="*" element={<Login onLoginSuccess={handleLoginSuccess} />} />

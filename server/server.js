@@ -38,7 +38,7 @@ app.use("/api/spaces", require("./src/routes/SpaceRoutes"));
 // Import booking routes
 app.use("/api/bookings", require("./src/routes/BookingRoutes"));
 
-
+app.use("/api/history", require('./src/routes/History'));
 
 // Basic route
 app.get("/", (req, res) => {
