@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaBars, FaUserCircle } from "react-icons/fa"; 
 import Logo from '../assets/Logo.jpg';
 import Cookies from 'js-cookie';
+import Activity from "./Activity";
 import './Navbar.css'; 
 
 const Navbar = () => {
@@ -58,6 +59,7 @@ const Navbar = () => {
                     <Link to="/app" className="relative hover-underline">Home</Link>
                     <Link to="/search" className="relative hover-underline">Find a Space</Link>
                     <Link to="/about-us" className="relative hover-underline">About Us</Link>
+                    <Link to="/activity" className="relative hover-underline">Activity</Link>
                 </div>
             </div>
 
