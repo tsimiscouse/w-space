@@ -11,9 +11,9 @@ const Footer = () => {
                     <img src={Logo} alt="Logo" className="h-[100px] mt-5 mb-4" />
                     <span className="ml-5 w-[3px] h-full bg-white" />
                     <div className="flex flex-col text-md items-start gap-2">
-                        <a href="/search" className="hover:text-gray-300">Find a Space</a>
+                        <a href="/search" className="hover:text-gray-300">W Space || Find a Space</a>
                         <a href="/about-us" className="mb-9 hover:text-gray-300">About Us</a>
-                        <p className="">© {new Date().getFullYear()} W. Space. All rights reserved.</p>
+                        <p className="">© {new Date().getFullYear()} W. Space by PAW 16. All rights reserved.</p>
                     </div>
                 </div>
                 
@@ -37,11 +37,11 @@ const Footer = () => {
                     <div className="text-md">
                         <div className="flex items-center mb-2">
                             <FaMapMarkerAlt className="mr-2" />
-                            <span>123 Main St, Your City</span>
+                            <span>DTETI, Engineering Faculty, Gadjah Mada University</span>
                         </div>
                         <div className="mt-2 flex items-center mb-2">
                             <FaEnvelope className="mr-2" />
-                            <span>contact@example.com</span>
+                            <span>wspace.paw16@gmail.com</span>
                         </div>
                         <div className="mt-2 flex items-center mb-2">
                             <FaPhone className="mr-2" />
