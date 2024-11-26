@@ -13,13 +13,8 @@ dotenv.config();
 const app = express();
 
 const corsOptions = {
-  origin: [
-    'https://w-space-4tv1.vercel.app', 
-    'http://localhost:3000',           
-    'https://w-space-server.vercel.app' 
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'credentials']
+  origin: `https://w-space-4tv1.vercel.app`,
+  credentials: true
 };
 
 // Middleware
@@ -27,9 +22,6 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
-
-// Handle preflight requests (OPTIONS) explicitly
-app.options('*', cors(corsOptions));
 
 // Setup database connection
 const connectDB = require("./config/db");
@@ -54,7 +46,7 @@ app.use("/api/contact", contactRoutes);
 app.use('/api/admin', adminRoutes);
 
 // Basic route
-app.get("/api", (req, res) => {
+app.get("/", (req, res) => {
     res.send("Welcome to W-Space API!");
 });
 
@@ -63,5 +55,5 @@ const PORT = process.env.PORT || 5000;
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server running on https://w-space-server.vercel.app`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });
