@@ -10,6 +10,7 @@ import BookingReceipt from './components/BookingReceipt.jsx';
 import ContactUs from './components/ContactUs.jsx';
 import AboutUs from './components/AboutUs.jsx'; 
 import OurTeam from './components/OurTeam.jsx'; 
+import Activity from './components/Activity.jsx';
 
 import './App.css';
 
@@ -65,6 +66,7 @@ function App() {
                         <Route path="/contact-us" element={<ContactUs />} />
                         <Route path="/about-us" element={<AboutUs />} />
                         <Route path="/our-team" element={<OurTeam />} />
+                        <Route path="/activity" element={<Activity />} />
                     </>
                 ) : (
                     <Route path="*" element={<Login onLoginSuccess={handleLoginSuccess} />} />
