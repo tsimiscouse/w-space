@@ -77,25 +77,25 @@ const Home = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />
-            <div className="absolute top-1/4 right-[120px] w-[750px] h-[400px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
+            <div className="absolute top-1/4 right-[50px] md:right-[120px] w-2/3 md:w-[750px] h-[400px] md:h-[400px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
             <div className="flex-grow flex items-center justify-center">
-                <div className="flex min-h-screen w-full max-w-6xl mt-4">
-                    <div className="w-[450px] flex items-center justify-center">
-                        <h1 className="text-6xl font-black">
+                <div className="flex flex-col lg:flex-row min-h-screen w-full md:max-w-6xl mt-4">
+                    <div className="lg:h-screen md:h-[400px] h-[250px] lg:w-[450px] w-9/10 flex items-center justify-center">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black">
                             Find your Perfect 
                             <span className="inline-block ml-3">{currentWord}</span>
                             <span className="inline-block animate-blink">|</span> 
                         </h1>
                     </div>
-                    <div className="w-2/3 flex items-center justify-center space-x-4">
-                        <div className='px-[80px] py-[60px] bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 border-2 border-gray-100 flex gap-5 animate-fadeInScale'>
+                    <div className="w-full md:w-2/3 flex items-center justify-center space-x-0 sm:space-x-4 sm:space-y-0 space-y-4">
+                        <div className="px-[80px] py-[60px] bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 border-2 border-gray-100 flex flex-col md:flex-row gap-5 animate-fadeInScale">
                             <DropdownCity setSelectedCity={setSelectedCity} />
                             <DropdownType setSelectedSpaceType={setSelectedSpaceType} />
-                            <button 
+                            <button
                                 onClick={handleSubmit}
                                 className="px-4 py-2 bg-gradient-to-r from-fuchsia-500 to-cyan-500 opacity-70 text-white font-black rounded-md transform transition-transform duration-300 hover:scale-105"
                             >
-                                Search
+                            Search
                             </button>
                         </div>
                     </div>
