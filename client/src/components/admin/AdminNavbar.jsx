@@ -14,7 +14,7 @@ const Navbar = () => {
 
     const fetchUserData = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/auth/profile", { withCredentials: true }); 
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/auth/profile`, { withCredentials: true }); 
             setFirstName(response.data.user.firstName);
         } catch (error) {
             console.error("Failed to fetch user data:", error);
@@ -41,7 +41,7 @@ const Navbar = () => {
     const handleLogout = async () => {
         try {
             // Call logout API to clear the token server-side
-            await axios.post("http://localhost:5000/api/auth/logout", {}, { withCredentials: true });
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/logout`, {}, { withCredentials: true });
     
             // Clear the cookie from the client-side
             Cookies.remove("token", { path: "/" });  

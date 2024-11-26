@@ -34,7 +34,7 @@ const Home = () => {
         const fetchSpaces = async () => {
             try {
                 setIsLoading(true); 
-                const response = await axios.get('http://localhost:5000/api/spaces', { timeout: 5000 }); 
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/spaces`, { timeout: 5000 }); 
                 setSpaces(response.data);
                 setIsLoading(false);
             } catch (error) {

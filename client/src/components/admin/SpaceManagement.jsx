@@ -58,7 +58,7 @@ const SpaceManagement = () => {
 
   const fetchSpaces = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/spaces');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/spaces`);
       setSpaces(response.data);
     } catch (error) {
       console.error('Error fetching spaces:', error);
@@ -67,7 +67,7 @@ const SpaceManagement = () => {
 
   const handleCreateSpace = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/spaces', newSpace);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/spaces`, newSpace);
       setSpaces([...spaces, response.data.space]);
       setNewSpace(initialSpaceState);
       setIsDialogOpen(false);
@@ -78,7 +78,7 @@ const SpaceManagement = () => {
 
   const handleUpdateSpace = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/spaces/${editingSpace._id}`, editingSpace);
+      const response = await axios.put(`${process.env.REACT_APP_API_URL}/api/spaces/${editingSpace._id}`, editingSpace);
       setSpaces(spaces.map((space) =>
         space._id === editingSpace._id ? response.data.space : space
       ));
@@ -91,7 +91,7 @@ const SpaceManagement = () => {
 
   const handleDeleteSpace = async (spaceId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/spaces/${spaceId}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/spaces/${spaceId}`);
       setSpaces(spaces.filter((space) => space._id !== spaceId));
       setDeleteConfirmation(null);
     } catch (error) {

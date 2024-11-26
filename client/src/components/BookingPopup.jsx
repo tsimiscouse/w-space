@@ -17,7 +17,7 @@ const BookingConfirmationPopup = ({
       if (!isOpen) return;
 
       try {
-        const response = await axios.get(`http://localhost:5000/api/spaces/${_id}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/spaces/${_id}`);
         setSpaceDetails(response.data);
         setLoading(false);
       } catch (error) {

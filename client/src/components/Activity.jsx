@@ -11,7 +11,7 @@ const Activity = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/bookings/user', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/bookings/user`, {
           method: 'GET',
           credentials: 'include',
         });
