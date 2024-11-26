@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import api from '../axios';
 
 const ContactUs = () => {
     const [showPopup, setShowPopup] = useState(false);
@@ -30,8 +31,8 @@ const ContactUs = () => {
         }
 
         try {
-            const response = await fetch(
-                `${process.env.REACT_APP_API_URL}/api/contact/send-email`,
+            const response = await api.get(
+                `/contact/send-email`,
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },

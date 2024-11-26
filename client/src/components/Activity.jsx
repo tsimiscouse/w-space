@@ -3,6 +3,7 @@ import Loader from './Loader/Loader';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import ActivityCard from './ActivityCard';
+import api from '../axios'; 
 
 const Activity = () => {
   const [bookings, setBookings] = useState([]);
@@ -11,10 +12,7 @@ const Activity = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/bookings/user`, {
-          method: 'GET',
-          credentials: 'include',
-        });
+        const response = await api.get('/bookings/user');
 
         if (response.ok) {
           const data = await response.json();

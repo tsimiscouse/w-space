@@ -3,6 +3,7 @@ import axios from "../axios";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from '../assets/Logo.jpg';
 import Loader from '../components/Loader/Loader'; 
+import api from '../axios';
 
 const Login = ({ onLoginSuccess }) => {
     const [data, setData] = useState({ email: "", password: "" });
@@ -24,8 +25,7 @@ const Login = ({ onLoginSuccess }) => {
         setLoading(true);
         setError("");
         try {
-            const url = `${process.env.REACT_APP_API_URL}/api/auth`; 
-            await axios.post(url, data, { withCredentials: true });
+            await api.post(`/auth`);
             if (rememberMe) {
                 localStorage.setItem("email", data.email);
             } else {

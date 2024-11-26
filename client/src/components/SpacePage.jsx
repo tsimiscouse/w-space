@@ -10,6 +10,7 @@ import { FaArrowLeft, FaArrowRight, FaWifi, FaParking,
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import BookingConfirmationPopup from './BookingPopup';
+import api from '../axios';
 
 // Map the amenities to their respective icons
 const amenityIcons = {
@@ -70,7 +71,7 @@ const SpacePage = () => {
   useEffect(() => {
     const fetchSpaceDetails = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/spaces/${_id}`);
+        const response = await api.get(`/spaces/${_id}`);
         setSpace(response.data);
         setLoading(false);
 
@@ -165,7 +166,7 @@ const SpacePage = () => {
     };
 
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/api/bookings`, bookingData, {
+      await api.post(`/bookings`, bookingData, {
         withCredentials: true,
       });
       setBookingConfirmationDetails(bookingData.bookingDetails);
@@ -178,7 +179,7 @@ const SpacePage = () => {
 
   const checkSpaceAvailability = async (bookingDate, startTime, endTime) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/bookings/check-availability`, {
+      const response = await api.get(`/bookings/check-availability`, {
         params: {
           spaceId: _id,
           date: bookingDate,
@@ -211,9 +212,6 @@ const SpacePage = () => {
   if (loading) {
     return <Loader />;
   }
-  
-
-  
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
