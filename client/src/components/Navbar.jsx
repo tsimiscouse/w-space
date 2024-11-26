@@ -6,6 +6,7 @@ import Logo from '../assets/Logo.jpg';
 import Cookies from 'js-cookie';
 import './Navbar.css'; 
 
+
 const Navbar = () => {
     const [firstName, setFirstName] = useState("");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -64,6 +65,7 @@ const Navbar = () => {
                     <Link to="/app" className="relative hover-underline">Home</Link>
                     <Link to="/search" className="relative hover-underline">Find a Space</Link>
                     <Link to="/about-us" className="relative hover-underline">About Us</Link>
+                    <Link to="/history" className="relative hover-underline">Book History</Link>
                 </div>
             </div>
 
