@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaBars, FaUserCircle } from "react-icons/fa"; 
 import Logo from '../../assets/Logo.jpg';
 import Cookies from 'js-cookie';
+import api from '../../axios'; 
 import './AdminNavbar.css'; 
 
 const Navbar = () => {
@@ -14,7 +15,7 @@ const Navbar = () => {
 
     const fetchUserData = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/auth/profile`, { withCredentials: true }); 
+            const response = await api.get(`/auth/profile`); 
             setFirstName(response.data.user.firstName);
         } catch (error) {
             console.error("Failed to fetch user data:", error);
@@ -41,7 +42,7 @@ const Navbar = () => {
     const handleLogout = async () => {
         try {
             // Call logout API to clear the token server-side
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/logout`, {}, { withCredentials: true });
+            await api.post('/auth/logout');
     
             // Clear the cookie from the client-side
             Cookies.remove("token", { path: "/" });  

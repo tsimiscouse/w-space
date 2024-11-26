@@ -35,6 +35,9 @@ router.post("/", async (req, res) => {
 // Profile route
 router.get("/profile", verifyToken, async (req, res) => {
     try {
+        res.header('Access-Control-Allow-Origin', 'https://w-space-4tv1.vercel.app');
+        res.header('Access-Control-Allow-Credentials', true);
+
         // Fetch user data from the database
         const userProfile = await User.findById(req.user._id);
         if (!userProfile) {

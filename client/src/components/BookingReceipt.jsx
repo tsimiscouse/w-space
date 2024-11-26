@@ -5,6 +5,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Loader from './Loader/Loader';
 import { FaCheckCircle, FaClock, FaMapMarkerAlt, FaUser, FaEnvelope, FaPhone, FaCalendar } from 'react-icons/fa';
+import api from '../axios';
 
 const BookingReceipt = () => {
   const { _Id } = useParams();
@@ -14,7 +15,7 @@ const BookingReceipt = () => {
   useEffect(() => {
     const fetchBookingDetails = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/bookings/${_Id}`);
+        const response = await api.get(`/bookings/${_Id}`);
         setBooking(response.data);
         setLoading(false);
       } catch (error) {

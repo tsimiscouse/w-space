@@ -10,6 +10,7 @@ import {
   Clock, 
   User,
 } from 'lucide-react';
+import api from '../../axios';
 
 const BookingManagement = () => {
   const [bookings, setBookings] = useState([]);
@@ -40,8 +41,8 @@ const BookingManagement = () => {
   // Fetch bookings based on `spaceId`
   const fetchBookings = async (spaceId) => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/bookings?spaceId=${spaceId}`
+      const response = await api.get(
+        `/bookings?spaceId=${spaceId}`
       );
   
       const bookingsWithParsedTimes = response.data.map((booking) => {
@@ -80,7 +81,7 @@ const BookingManagement = () => {
   // Fetch all spaces
   const fetchSpaces = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/spaces`);
+      const response = await api.get(`/spaces`);
       setSpaces(response.data);
       if (response.data.length > 0) {
         // Automatically select the first space
@@ -96,8 +97,8 @@ const BookingManagement = () => {
     if (!selectedBooking) return;
 
     try {
-      await axios.patch(
-        `${process.env.REACT_APP_API_URL}/api/bookings/${selectedBooking._id}/status`,
+      await api.patch(
+        `/bookings/${selectedBooking._id}/status`,
         { status: selectedBooking.status }
       );
 
@@ -126,7 +127,7 @@ const BookingManagement = () => {
   // Delete a booking
   const handleDeleteBooking = async (bookingId) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/api/bookings/${bookingId}`);
+      await api.delete(`/bookings/${bookingId}`);
       setBookings(bookings.filter((booking) => booking._id !== bookingId));
     } catch (error) {
       console.error("Error deleting booking:", error);

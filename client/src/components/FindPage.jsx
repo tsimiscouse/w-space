@@ -8,6 +8,7 @@ import GoogleMaps from './GoogleMaps';
 import axios from '../axios';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import api from '../axios';
 
 // Haversine formula to calculate distance between two points on the earth
 const getDistance = (lat1, lon1, lat2, lon2) => {
@@ -52,7 +53,7 @@ const FindPage = () => {
   useEffect(() => {
     const fetchSpaces = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/spaces`); // Fetch all spaces
+        const response = await api.get(`/spaces`); // Fetch all spaces
         setSpaces(response.data);
         
         // For mobile, limit to 10 closest spaces
@@ -88,7 +89,7 @@ const FindPage = () => {
   useEffect(() => {
     const fetchSpacesByQuery = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/spaces/search`, {
+        const response = await api.get(`/spaces/search`, {
           params: { query },
         });
         
@@ -137,7 +138,7 @@ const FindPage = () => {
     if (!query) {
       setQuery(''); 
       setSelectedSpace(null); 
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/spaces`); 
+      const response = await api.get(`/spaces`); 
       setSpaces(response.data);
       
       // For mobile, limit to 10 closest spaces
