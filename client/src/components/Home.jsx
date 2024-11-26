@@ -4,8 +4,16 @@ import DropdownCity from './DropdownCity';
 import DropdownType from './DropdownType';
 import { useState, useEffect } from 'react';
 import './Home.css';
+<<<<<<< Updated upstream
 import Slider from './Slider';
 import axios from 'axios';
+=======
+import cws1 from '../assets/cws-section-1.jpg';
+import cws2 from '../assets/cws-section-2.jpg';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import axios from "axios";
+>>>>>>> Stashed changes
 
 const words = ["Space.", "Place.", "Room.", "Spot."];
 
