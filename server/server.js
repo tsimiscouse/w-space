@@ -19,8 +19,7 @@ const corsOptions = {
     'https://w-space-server.vercel.app' 
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'credentials'],
-  credentials: true
+  allowedHeaders: ['Content-Type', 'Authorization', 'credentials']
 };
 
 // Middleware
