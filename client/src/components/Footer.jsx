@@ -4,8 +4,8 @@ import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaTwitter, FaInstagram, FaFacebook
 
 const Footer = () => {
     return (
-        <footer className="bg-[#191B1D] text-white py-8 px-4">
-            <div className="container max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+        <footer className="bg-[#191B1D] text-white py-8 px-4 max-w-screen">
+            <div className="container max-w-screen-xl md:mx-auto mx-[20px] grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Logo and Contact Section */}
                 <div className="flex w-full items-start text-lg gap-5">
                     <img src={Logo} alt="Logo" className="h-[100px] mt-5 mb-4" />
@@ -18,7 +18,7 @@ const Footer = () => {
                 </div>
                 
                 {/* Contact Section */}
-                <div className="flex flex-col items-end">
+                <div className="flex flex-col md:items-end md:mt-0 md:ml-0 mt-[25px]">
                     {/* Social Media Icons */}
                     <div className="flex space-x-4 mb-4 text-4xl">
                         <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300">

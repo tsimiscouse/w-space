@@ -52,16 +52,16 @@ const Navbar = () => {
 
     return (
         <nav className="navbar-fixed bg-white p-4 flex justify-between items-center border-b-2 border-gray-300">
-            <div className="flex items-center space-x-8 ml-[160px]">
+            <div className="flex items-center space-x-8 ml-[50px] md:ml-[160px]">
                 <img src={Logo} alt="Logo" className="h-10" />
-                <div className="flex space-x-[50px] px-[30px]">
+                <div className="hidden md:flex space-x-[50px] px-[30px]">
                     <Link to="/app" className="relative hover-underline">Home</Link>
                     <Link to="/search" className="relative hover-underline">Find a Space</Link>
                     <Link to="/about-us" className="relative hover-underline">About Us</Link>
                 </div>
             </div>
 
-            <div className="relative mr-[50px]" ref={dropdownRef}>
+            <div className="relative md:mr-[50px] mr-[20px]" ref={dropdownRef}>
                 <div className="flex items-center mr-5">
                     <div className="flex items-center mr-5">
                         <FaUserCircle className="text-[#191B1D] h-8 w-8" />
@@ -83,6 +83,24 @@ const Navbar = () => {
                         <div
                             className="absolute top-[-8px] right-6 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-b-8 border-b-[#191B1D]"
                         ></div>
+                        <Link
+                            to="/app"
+                            className="block ml-8 my-7 text-left hover:text-gray-500 md:hidden"
+                        >
+                            Home
+                        </Link>
+                        <Link
+                            to="/search"
+                            className="block ml-8 my-7 text-left hover:text-gray-500 md:hidden"
+                        >
+                            Find a Space
+                        </Link>
+                        <Link
+                            to="/about-us"
+                            className="block ml-8 my-7 text-left hover:text-gray-500 md:hidden"
+                        >
+                            About Us
+                        </Link>
                         <Link
                             to="/contact-us"
                             className="block ml-8 my-7 text-left hover:text-gray-500"
