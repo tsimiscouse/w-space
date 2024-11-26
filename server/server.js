@@ -13,7 +13,7 @@ dotenv.config();
 const app = express();
 
 const corsOptions = {
-    origin: 'http://localhost:3000', // Adjust if frontend URL is different
+    origin: 'https://w-space-4tv1.vercel.app/',
     credentials: true,
 };
 
