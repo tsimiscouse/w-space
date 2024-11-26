@@ -1,4 +1,3 @@
-// SpaceModels.js
 const mongoose = require('mongoose');
 
 const spaceSchema = new mongoose.Schema({
@@ -78,5 +77,18 @@ const spaceSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+
+spaceSchema.methods.checkAvailability = async function (startTime, endTime) {
+  const space = this;
+
+  // Query for overlapping bookings
+  const existingBooking = await mongoose.model('Booking').findOne({
+    spaceId: space._id,
+    'bookingDetails.startTime': { $lt: endTime },
+    'bookingDetails.endTime': { $gt: startTime },
+  });
+
+  return !existingBooking; // Returns true if no overlapping booking is found
+};
 
 module.exports = mongoose.model('Space', spaceSchema);

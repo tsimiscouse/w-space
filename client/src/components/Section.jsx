@@ -21,7 +21,7 @@ const Section = ({ image, title, description, link, reverse }) => {
           reverse ? "md:pr-12" : "md:pl-12"
         } text-center md:text-left`}
       >
-        <h2 className="text-3xl font-extrabold text-gray-900">{title}</h2>
+        <h2 className="text-3xl font-bold text-gray-900">{title}</h2>
         <p className="mt-4 text-lg text-gray-600">{description}</p>
         <a
           href={link}

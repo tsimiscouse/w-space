@@ -12,10 +12,9 @@ dotenv.config();
 // Initialize Express app
 const app = express();
 
-// CORS Options
 const corsOptions = {
-    origin: 'http://localhost:3000', 
-    credentials: true, 
+    origin: 'http://localhost:3000', // Adjust if frontend URL is different
+    credentials: true,
 };
 
 // Middleware
@@ -28,15 +27,23 @@ app.use(cookieParser());
 const connectDB = require("./config/db");
 connectDB();
 
-// Import user routes
-app.use("/api/users", require("./src/routes/UserRoutes")); 
-app.use("/api/auth", require("./src/routes/AuthRoutes"));
+// Import routes
+const userRoutes = require("./src/routes/UserRoutes");
+const authRoutes = require("./src/routes/AuthRoutes");
+const spaceRoutes = require("./src/routes/SpaceRoutes");
+const bookingRoutes = require("./src/routes/BookingRoutes");
+const contactRoutes = require("./src/routes/ContactRoutes");
+const adminRoutes = require('./src/routes/AdminRoutes');
 
-// Import space routes
-app.use("/api/spaces", require("./src/routes/SpaceRoutes"));
+// Use routes
+app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/spaces", spaceRoutes);
+app.use("/api/bookings", bookingRoutes);
+app.use("/api/contact", contactRoutes);
 
-// Import booking routes
-app.use("/api/bookings", require("./src/routes/BookingRoutes"));
+// Admin Routes
+app.use('/api/admin', adminRoutes);
 
 app.use("/api/history", require('./src/routes/History'));
 

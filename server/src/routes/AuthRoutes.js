@@ -50,6 +50,7 @@ router.get("/profile", verifyToken, async (req, res) => {
                 userId: userProfile._id,
                 firstName: userProfile.firstName,
                 lastName: userProfile.lastName,
+                role: userProfile.role,
             }),
             { secure: false }
         );
@@ -62,6 +63,7 @@ router.get("/profile", verifyToken, async (req, res) => {
                 userId: userProfile._id,
                 firstName: userProfile.firstName,
                 lastName: userProfile.lastName,
+                role: userProfile.role,
             },
         });
     } catch (error) {

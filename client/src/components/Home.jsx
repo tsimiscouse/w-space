@@ -10,8 +10,10 @@ import './Home.css';
 import cws1 from '../assets/cws-section-1.jpg';
 import cws2 from '../assets/cws-section-2.jpg';
 import AOS from 'aos';
+import axios from 'axios';
 import 'aos/dist/aos.css';
-import axios from "axios";
+import WhyChooseUs from "./WhyChooseUs";
+import Loader from './Loader/Loader'; 
 
 const words = ["Space.", "Place.", "Room.", "Spot."];
 
@@ -19,26 +21,46 @@ const Home = () => {
     const [selectedCity, setSelectedCity] = useState("Select a City");
     const [selectedSpaceType, setSelectedSpaceType] = useState("Select a Space Type");
     const [currentWord, setCurrentWord] = useState("");
-    const [spaces, setSpaces] = useState([]); // Stores the space data
+    const [spaces, setSpaces] = useState([]); 
     const [isDeleting, setIsDeleting] = useState(false);
     const [wordIndex, setWordIndex] = useState(0);
     const [charIndex, setCharIndex] = useState(0);
+    const [isAdmin, setIsAdmin] = useState(false); 
+    const [isLoading, setIsLoading] = useState(true); 
 
     const navigate = useNavigate();
-
+    
     useEffect(() => {
-        // Fetch spaces from your backend API (MongoDB)
         const fetchSpaces = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/spaces'); // Adjust URL as necessary
-                setSpaces(response.data); // Set the spaces in state
+                setIsLoading(true); 
+                const response = await axios.get('http://localhost:5000/api/spaces', { timeout: 5000 }); // Set timeout (in ms)
+                setSpaces(response.data);
+                setIsLoading(false);
             } catch (error) {
                 console.error("Error fetching spaces:", error);
+                setIsLoading(false);
             }
         };
+        
+        const token = getCookie('userProfile'); // Get token from cookies
+        if (token) {
+            try {
+                // Decode URL-encoded JSON manually
+                const decodedToken = JSON.parse(decodeURIComponent(token));
+                if (decodedToken.role === 'admin') {
+                    setIsAdmin(true);
+                    navigate('/admin');
+                } else {
+                    setIsAdmin(false);
+                }
+            } catch (error) {
+                console.error('Token decoding failed:', error);
+            }
+        }
 
         fetchSpaces();
-    }, []);
+    }, [navigate]);
 
     useEffect(() => {
         const typingInterval = setInterval(() => {
@@ -75,61 +97,81 @@ const Home = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />
-            <div className="absolute top-1/4 right-[120px] w-[750px] h-[400px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
-            <div className="flex-grow flex items-center justify-center">
-                <div className="flex min-h-screen w-full max-w-6xl mt-4">
-                    <div className="w-[450px] flex items-center justify-center">
-                        <h1 className="text-6xl font-black">
-                            Find your Perfect 
-                            <span className="inline-block ml-3">{currentWord}</span>
-                            <span className="inline-block animate-blink">|</span> 
-                        </h1>
-                    </div>
-                    <div className="w-2/3 flex items-center justify-center space-x-4">
-                        <div className='px-[80px] py-[60px] bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 border-2 border-gray-100 flex gap-5 animate-fadeInScale'>
-                            <DropdownCity setSelectedCity={setSelectedCity} />
-                            <DropdownType setSelectedSpaceType={setSelectedSpaceType} />
-                            <button 
-                                onClick={handleSubmit}
-                                className="px-4 py-2 bg-gradient-to-r from-fuchsia-500 to-cyan-500 opacity-70 text-white font-black rounded-md transform transition-transform duration-300 hover:scale-105"
-                            >
-                                Search
-                            </button>
+            {isLoading ? (
+                <Loader /> 
+            ) : (
+                <>
+                    <div className="absolute top-1/4 right-[120px] w-[750px] h-[400px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
+                    <div className="flex-grow flex items-center justify-center">
+                        <div className="flex min-h-screen w-full max-w-6xl mt-4">
+                            <div className="w-[450px] flex items-center justify-center">
+                                <h1 className="text-6xl font-bold">
+                                    Find your Perfect 
+                                    <span className="inline-block ml-3">{currentWord}</span>
+                                    <span className="inline-block animate-blink">|</span> 
+                                </h1>
+                            </div>
+                            <div className="w-2/3 flex items-center justify-center space-x-4">
+                                <div className='px-[80px] py-[60px] bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 border-2 border-gray-100 flex gap-5 animate-fadeInScale'>
+                                    <DropdownCity setSelectedCity={setSelectedCity} />
+                                    <DropdownType setSelectedSpaceType={setSelectedSpaceType} />
+                                    <button 
+                                        onClick={handleSubmit}
+                                        className="px-4 py-2 bg-gradient-to-r from-fuchsia-500 to-cyan-500 opacity-70 text-white font-bold rounded-md transform transition-transform duration-300 hover:scale-105"
+                                    >
+                                        Search
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div className='min-h-[1080px] px-[40px]'>
-                <div className="absolute left-[100px] w-[500px] h-[400px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
-                {/* Section 1 */}
-                <div data-aos="fade-left">
-                    <Section
-                        image={cws1}
-                        title="Unlock Your Ideal Workspace"
-                        description="Whether you're a startup or an established company, we provide the perfect space for your team. Discover flexible memberships and fully equipped offices that adapt to your needs, empowering your productivity."
-                        link="#"
-                    />    
-                </div>          
-                <div className="absolute right-[100px] w-[500px] h-[400px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
-                {/* Section 2 */}
-                <div data-aos="fade-right">
-                    <Section
-                        image={cws2}
-                        title="Future-Ready Workspaces for Your Hybrid Workforce"
-                        description="Transform your real estate strategy with scalable office solutions that blend flexibility and cost-efficiency. From coworking spaces to turnkey offices, we’ve got everything you need to power your hybrid work model."
-                        link="#"
-                        reverse={true}
-                        data-aos="fade-right"
-                    />
-                </div>
+                    <div className='min-h-[1080px] px-[40px]'>
+                        <div className="absolute left-[100px] w-[500px] h-[400px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
+                        {/* Section 1 */}
+                        <div data-aos="fade-left">
+                            <Section
+                                image={cws1}
+                                title="Unlock Your Ideal Workspace"
+                                description="Whether you're a startup or an established company, we provide the perfect space for your team. Discover flexible memberships and fully equipped offices that adapt to your needs, empowering your productivity."
+                                link="#"
+                            />    
+                        </div>          
+                        <div className="absolute right-[100px] w-[500px] h-[400px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
+                        {/* Section 2 */}
+                        <div data-aos="fade-right">
+                            <Section
+                                image={cws2}
+                                title="Future-Ready Workspaces for Your Hybrid Workforce"
+                                description="Transform your real estate strategy with scalable office solutions that blend flexibility and cost-efficiency. From coworking spaces to turnkey offices, we’ve got everything you need to power your hybrid work model."
+                                link="#"
+                                reverse={true}
+                                data-aos="fade-right"
+                            />
+                        </div>
 
-                <div className="py-12 mb-12" data-aos="fade-up">
-                    <SpaceCarousel />
-                </div>
-            </div>
-            <Footer />
+                        <div className="justify-center" data-aos="fade-up">
+                            <WhyChooseUs />
+                        </div>
+
+                        <div className="py-12 mb-12" data-aos="fade-up">
+                            <SpaceCarousel />
+                        </div>
+                    </div>
+                    <Footer />
+                </>
+            )}
         </div>
     );
 };
+
+// Helper function to retrieve a cookie by name
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+        return parts.pop().split(';').shift();
+    }
+    return null;
+}
 
 export default Home;

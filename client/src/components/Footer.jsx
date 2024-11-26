@@ -37,11 +37,11 @@ const Footer = () => {
                     <div className="text-md">
                         <div className="flex items-center mb-2">
                             <FaMapMarkerAlt className="mr-2" />
-                            <span>123 Main St, Your City</span>
+                            <span>Jl. Grafika, Sleman</span>
                         </div>
                         <div className="mt-2 flex items-center mb-2">
                             <FaEnvelope className="mr-2" />
-                            <span>contact@example.com</span>
+                            <span>wspace.paw16@gmail.com</span>
                         </div>
                         <div className="mt-2 flex items-center mb-2">
                             <FaPhone className="mr-2" />
