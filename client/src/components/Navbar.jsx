@@ -52,7 +52,7 @@ const Navbar = () => {
 
     return (
         <nav className="navbar-fixed bg-white p-4 flex justify-between items-center border-b-2 border-gray-300 font-bold">
-            <div className="flex items-center space-x-8 ml-[50px] md:ml-[160px]">
+            <div className="flex items-center space-x-8 ml-[40px] md:ml-[80px] lg:ml-[160px]">
                 <img src={Logo} alt="Logo" className="h-10" />
                 <div className="hidden lg:flex space-x-[50px] px-[30px]">
                     <Link to="/app" className="relative hover-underline">Home</Link>
