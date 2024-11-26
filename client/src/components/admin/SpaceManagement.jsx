@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { 
   X, Edit2, Trash2, PlusCircle, MapPin, 
-  DollarSign, Users, Image, Star, Check 
+  DollarSign, Users, Check 
 } from 'lucide-react';
 import Navbar from './AdminNavbar';
 import Footer from '../Footer';

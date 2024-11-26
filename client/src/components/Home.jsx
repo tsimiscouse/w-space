@@ -34,32 +34,38 @@ const Home = () => {
         const fetchSpaces = async () => {
             try {
                 setIsLoading(true); 
-                const response = await axios.get('http://localhost:5000/api/spaces', { timeout: 5000 }); // Set timeout (in ms)
+                const response = await axios.get('http://localhost:5000/api/spaces', { timeout: 5000 }); 
                 setSpaces(response.data);
                 setIsLoading(false);
             } catch (error) {
                 console.error("Error fetching spaces:", error);
+                setSpaces([]); // Ensure spaces is an empty array on error
                 setIsLoading(false);
             }
         };
         
-        const token = getCookie('userProfile'); // Get token from cookies
-        if (token) {
-            try {
-                // Decode URL-encoded JSON manually
-                const decodedToken = JSON.parse(decodeURIComponent(token));
-                if (decodedToken.role === 'admin') {
-                    setIsAdmin(true);
-                    navigate('/admin');
-                } else {
-                    setIsAdmin(false);
+        const checkUserToken = () => {
+            const token = getCookie('userProfile');
+            if (token) {
+                try {
+                    // Safely parse the token
+                    const decodedToken = JSON.parse(decodeURIComponent(token));
+                    if (decodedToken && decodedToken.role === 'admin') {
+                        setIsAdmin(true);
+                        navigate('/admin');
+                    } else {
+                        setIsAdmin(false);
+                    }
+                } catch (error) {
+                    console.error('Token decoding failed:', error);
+                    // Clear invalid token
+                    document.cookie = 'userProfile=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
                 }
-            } catch (error) {
-                console.error('Token decoding failed:', error);
             }
-        }
+        };
 
         fetchSpaces();
+        checkUserToken();
     }, [navigate]);
 
     useEffect(() => {
@@ -67,15 +73,15 @@ const Home = () => {
             if (isDeleting) {
                 if (charIndex > 0) {
                     setCurrentWord(prev => prev.slice(0, -1)); 
-                    setCharIndex(charIndex - 1);
+                    setCharIndex(prev => prev - 1);
                 } else {
                     setIsDeleting(false);
-                    setWordIndex((wordIndex + 1) % words.length); 
+                    setWordIndex(prev => (prev + 1) % words.length); 
                 }
             } else {
                 if (charIndex < words[wordIndex].length) {
                     setCurrentWord(words[wordIndex].slice(0, charIndex + 1)); 
-                    setCharIndex(charIndex + 1);
+                    setCharIndex(prev => prev + 1);
                 } else {
                     setIsDeleting(true);
                 }
@@ -87,11 +93,20 @@ const Home = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        navigate(`/search?query=city=${encodeURIComponent(selectedCity)}&type=${encodeURIComponent(selectedSpaceType)}`); 
+        if (selectedCity !== "Select a City" && selectedSpaceType !== "Select a Space Type") {
+            navigate(`/search?query=city=${encodeURIComponent(selectedCity)}&type=${encodeURIComponent(selectedSpaceType)}`); 
+        } else {
+            // Optional: Add toast or alert for user to select both city and space type
+            alert("Please select both City and Space Type");
+        }
     };
 
     useEffect(() => {
-        AOS.init({ duration: 2000 });
+        AOS.init({ 
+            duration: 2000,
+            once: true, 
+            offset: 100 
+        });
     }, []);
 
     return (
@@ -100,32 +115,52 @@ const Home = () => {
             {isLoading ? (
                 <Loader /> 
             ) : (
-                <>
-                <div className="absolute top-1/4 right-[50px] md:right-[120px] w-2/3 md:w-[750px] h-[400px] md:h-[400px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
-                <div className="flex-grow flex items-center justify-center">
-                    <div className="flex flex-col lg:flex-row min-h-screen w-full md:max-w-6xl mt-4">
-                        <div className="lg:h-screen md:h-[400px] h-[250px] lg:w-[450px] w-9/10 flex items-center justify-center">
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black">
-                                Find your Perfect 
-                                <span className="inline-block ml-3">{currentWord}</span>
-                                <span className="inline-block animate-blink">|</span> 
-                            </h1>
-                        </div>
-                        <div className="w-full md:w-2/3 flex items-center justify-center space-x-0 sm:space-x-4 sm:space-y-0 space-y-4">
-                            <div className="px-[80px] py-[60px] bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 border-2 border-gray-100 flex flex-col md:flex-row gap-5 animate-fadeInScale">
-                                <DropdownCity setSelectedCity={setSelectedCity} />
-                                <DropdownType setSelectedSpaceType={setSelectedSpaceType} />
-                                <button
-                                    onClick={handleSubmit}
-                                    className="px-4 py-2 bg-gradient-to-r from-fuchsia-500 to-cyan-500 opacity-70 text-white font-black rounded-md transform transition-transform duration-300 hover:scale-105"
-                                >
-                                Search
-                            </button>
+                <div className="flex-grow">
+                    <div className="relative">
+                        <div className="absolute top-1/4 right-[50px] md:right-[120px] w-2/3 md:w-[750px] h-[400px] md:h-[400px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
+                        
+                        <div className="container mx-auto mt-8 sm:mt-0 sm:px-4 px-2 flex flex-col lg:flex-row items-center justify-center min-h-screen">
+                            <div className="lg:w-[50%] xl:w-[30%] text-center lg:text-left mb-8 lg:mb-0 lg:ml-[80px]">
+                                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold">
+                                    Find your Perfect 
+                                    <span className="sm:inline-block ml-3 hidden">{currentWord}</span>
+                                    <span className="sm:inline-block hidden animate-blink">|</span> 
+                                </h1>
+                                <div className="text-4xl md:text-5xl lg:text-6xl font-bold">
+                                    <span className="inline-block ml-3 sm:hidden">{currentWord}</span>
+                                    <span className="inline-block sm:hidden animate-blink">|</span> 
+                                </div> 
+                            </div>
+                            
+                            <div className="lg:w-1/2 w-full flex justify-center">
+                                <div className="px-8 py-10 bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 border-2 border-gray-100 gap-5 animate-fadeInScale hidden sm:flex">
+                                    <DropdownCity setSelectedCity={setSelectedCity} />
+                                    <DropdownType setSelectedSpaceType={setSelectedSpaceType} />
+                                    <button
+                                        onClick={handleSubmit}
+                                        className="px-4 py-2 bg-gradient-to-r from-fuchsia-500 to-cyan-500 opacity-70 text-white font-black rounded-md transform transition-transform duration-300 hover:scale-105"
+                                    >
+                                        Search
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="sm:hidden w-full flex justify-center">
+                                <div className="px-8 py-10 bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 border-2 border-gray-100 flex-col space-y-8 animate-fadeInScale">
+                                    <DropdownCity setSelectedCity={setSelectedCity} />
+                                    <DropdownType setSelectedSpaceType={setSelectedSpaceType} />
+                                    <button
+                                        onClick={handleSubmit}
+                                        className="text-[12px] w-full px-4 py-2 bg-gradient-to-r from-fuchsia-500 to-cyan-500 opacity-70 text-white font-black rounded-md transform transition-transform duration-300 hover:scale-105"
+                                    >
+                                        Search
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div className='min-h-[1080px] px-[40px]'>
-                        <div className="absolute left-[100px] w-[500px] h-[400px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
-                        {/* Section 1 */}
+
+                    <div className="container mx-auto px-4">
                         <div data-aos="fade-left">
                             <Section
                                 image={cws1}
@@ -134,20 +169,18 @@ const Home = () => {
                                 link="#"
                             />    
                         </div>          
-                        <div className="absolute right-[100px] w-[500px] h-[400px] rounded-full bg-gradient-radial from-fuchsia-500 to-cyan-500 opacity-30 blur-3xl -z-10"></div>
-                        {/* Section 2 */}
+
                         <div data-aos="fade-right">
                             <Section
                                 image={cws2}
                                 title="Future-Ready Workspaces for Your Hybrid Workforce"
-                                description="Transform your real estate strategy with scalable office solutions that blend flexibility and cost-efficiency. From coworking spaces to turnkey offices, we’ve got everything you need to power your hybrid work model."
+                                description="Transform your real estate strategy with scalable office solutions that blend flexibility and cost-efficiency. From coworking spaces to turnkey offices, we've got everything you need to power your hybrid work model."
                                 link="#"
                                 reverse={true}
-                                data-aos="fade-right"
                             />
                         </div>
 
-                        <div className="justify-center" data-aos="fade-up">
+                        <div data-aos="fade-up">
                             <WhyChooseUs />
                         </div>
 
@@ -155,21 +188,23 @@ const Home = () => {
                             <SpaceCarousel />
                         </div>
                     </div>
+                    
                     <Footer />
-                </>
+                </div>
             )}
         </div>
     );
 };
 
-// Helper function to retrieve a cookie by name
+// Safer cookie retrieval function
 function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) {
-        return parts.pop().split(';').shift();
-    }
-    return null;
+    if (typeof document === 'undefined') return null;
+    
+    const cookieValue = document.cookie
+        .split('; ')
+        .find(row => row.startsWith(`${name}=`));
+    
+    return cookieValue ? cookieValue.split('=')[1] : null;
 }
 
 export default Home;
