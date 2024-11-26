@@ -38,6 +38,8 @@ app.use("/api/spaces", require("./src/routes/SpaceRoutes"));
 // Import booking routes
 app.use("/api/bookings", require("./src/routes/BookingRoutes"));
 
+
+
 // Basic route
 app.get("/", (req, res) => {
     res.send("Welcome to W-Space API!");

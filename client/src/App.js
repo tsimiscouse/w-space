@@ -7,6 +7,7 @@ import Loader from './components/Loader/Loader.jsx';
 import FindPage from './components/FindPage.jsx';
 import SpacePage from './components/SpacePage.jsx';
 import BookingReceipt from './components/BookingReceipt.jsx';
+import BookingHistory from './components/History.jsx';
 import './App.css';
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
                         <Route path="/search" element={<FindPage />} />
                         <Route path="/spaces/:_id" element={<SpacePage />} />
                         <Route path="/booking-receipt/:_Id" element={<BookingReceipt />} />
+                        <Route path="/history" element={<BookingHistory/>}/>
                     </>
                 ) : (
                     <Route path="*" element={<Login onLoginSuccess={handleLoginSuccess} />} />
