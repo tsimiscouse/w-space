@@ -46,7 +46,7 @@ app.use("/api/contact", contactRoutes);
 app.use('/api/admin', adminRoutes);
 
 // Basic route
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
     res.send("Welcome to W-Space API!");
 });
 
@@ -55,5 +55,5 @@ const PORT = process.env.PORT || 5000;
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on https://w-space-server.vercel.app`);
 });
