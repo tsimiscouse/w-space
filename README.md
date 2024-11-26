@@ -77,20 +77,31 @@ Buat file .env di dalam folder server dengan konfigurasi berikut:
 ```bash
 MONGO_URI=<your_mongo_db_connection_string>
 JWTPRIVATEKEY=<your_jwt_private_key>
+SALT=<salt_value>
+
+SENDGRID_API_KEY=YOUR_API_KEY
+EMAIL_USER=<user_email>
+EMAIL_TO=<your_email>
+
+EMAIL_SENDER=<your_email>
+EMAIL_SENDER_PASS=<your_email_password>
 PORT=5000
 ```
 Frontend (Client)
 Buat file .env di dalam folder client dengan konfigurasi berikut:
 ```
-REACT_APP_API_URL=http://localhost:5000
+REACT_APP_API_URL=YOUR_CLIENT_DOMAIN
+REACT_APP_GOOGLE_MAPS_API_KEY=YOUR_API_KEY
 ```
 
 4. Jalankan Aplikasi
 Untuk memulai aplikasi backend dan frontend, jalankan perintah berikut di terminal:
 
+**Pastikan untuk menginstall semua depedencies**
+
 Backend (Server):
 ```
-npm start
+npm run dev
 ```
 Frontend (Client):
 ```
