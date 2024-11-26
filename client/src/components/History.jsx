@@ -1,92 +1,105 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const BookingHistory = () => {
   const [bookings, setBookings] = useState([]);
-  const [filter, setFilter] = useState('all'); // 'all', 'past', 'upcoming'
+  const [spaces, setSpaces] = useState([]); // List of spaces for dropdown
+  const [spaceId, setSpaceId] = useState(''); // For filtering based on spaceId
+  const [error, setError] = useState(''); // For error handling
 
   useEffect(() => {
-    fetchBookings();
-  }, [filter]); // Refetch bookings setiap kali filter berubah
+    fetchSpaces(); // Fetch the list of spaces on component mount
+    fetchBookings(); // Fetch bookings initially
+  }, []);
 
-  // Fungsi untuk mengambil data booking dari backend
-  const fetchBookings = async () => {
+  useEffect(() => {
+    fetchBookings(); // Re-fetch bookings whenever spaceId changes
+  }, [spaceId]);
+
+  // Fetch spaces for the dropdown
+  const fetchSpaces = async () => {
     try {
-      const response = await axios.get("/api/history", {
-        params: { filter },
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }, // Mendapatkan token dari localStorage
+      const response = await axios.get('http://localhost:5000/api/spaces/', {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
-      setBookings(response.data.data); // Ambil data booking dari response
+      setSpaces(response.data);
+      setError('');
     } catch (error) {
-      console.error('Error fetching bookings:', error);
+      console.error('Error fetching spaces:', error);
+      setError('Error fetching spaces');
     }
   };
 
-  // Menentukan status booking berdasarkan waktu
-  const getStatus = (startTime, endTime, date) => {
-    const currentTime = new Date();
-    const bookingDate = new Date(date);
-    const bookingStartTime = new Date(`${bookingDate.toISOString().split('T')[0]}T${startTime}`);
-    const bookingEndTime = new Date(`${bookingDate.toISOString().split('T')[0]}T${endTime}`);
-
-    if (bookingEndTime < currentTime) {
-      return 'Past';
-    } else if (bookingStartTime > currentTime) {
-      return 'Upcoming';
-    } else {
-      return 'Ongoing';
+  // Fetch bookings based on selected spaceId
+  const fetchBookings = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/bookings/', {
+        params: { spaceId }, // Send spaceId as query param
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+      setBookings(response.data);
+      setError('');
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
+      setError(error.response?.data?.message || 'Error fetching bookings');
     }
   };
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-2xl font-bold mb-4">Booking History</h1>
+      <h1 className="text-2xl font-bold mb-4 heading">All Booking History</h1>
 
-      {/* Filter Buttons */}
-      <div className="flex gap-4 mb-6">
-        <button
-          onClick={() => setFilter('all')}
-          className={`px-4 py-2 rounded ${filter === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+      {/* SpaceId Filter */}
+      <div className="mb-6">
+        <label htmlFor="spaceId" className="block text-sm font-medium text-gray-700 label-text">
+          Filter by Space
+        </label>
+        <select
+          id="spaceId"
+          value={spaceId}
+          onChange={(e) => setSpaceId(e.target.value)}
+          className="mt-1 p-2 w-full border rounded-md input-field"
         >
-          Show All
-        </button>
-        <button
-          onClick={() => setFilter('past')}
-          className={`px-4 py-2 rounded ${filter === 'past' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-        >
-          Past
-        </button>
-        <button
-          onClick={() => setFilter('upcoming')}
-          className={`px-4 py-2 rounded ${filter === 'upcoming' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-        >
-          Upcoming
-        </button>
+          <option value="">All Spaces</option>
+          {spaces.map((space) => (
+            <option key={space._id} value={space._id}>
+              {space.name}
+            </option>
+          ))}
+        </select>
       </div>
 
+      {/* Error Message */}
+      {error && <div className="text-red-500 mb-4">{error}</div>}
+
       {/* Bookings Table */}
-      <div className="bg-white shadow-md rounded">
+      <div className="bg-white shadow-md rounded overflow-x-auto table-container">
         <table className="min-w-full border-collapse">
           <thead>
             <tr className="bg-gray-200">
+              <th className="py-2 px-4 border">Space</th>
               <th className="py-2 px-4 border">Date</th>
               <th className="py-2 px-4 border">Time</th>
-              <th className="py-2 px-4 border">Status</th>
             </tr>
           </thead>
           <tbody>
-            {bookings.map((booking) => (
-              <tr key={booking._id} className="hover:bg-gray-100">
-               
-                <td className="py-2 px-4 border">{booking.bookingDetails.date}</td>
-                <td className="py-2 px-4 border">
-                  {booking.bookingDetails.startTime} - {booking.bookingDetails.endTime}
-                </td>
-                <td className="py-2 px-4 border">
-                  {getStatus(booking.bookingDetails.startTime, booking.bookingDetails.endTime, booking.bookingDetails.date)}
-                </td>
+            {bookings.length > 0 ? (
+              bookings.map((booking) => (
+                <tr key={booking._id} className="hover:bg-gray-100">
+                  <td className="py-2 px-4 border">{booking.spaceId?.name || 'N/A'}</td>
+                  <td className="py-2 px-4 border">
+                    {new Date(booking.bookingDetails.date).toLocaleDateString()}
+                  </td>
+                  <td className="py-2 px-4 border">
+                    {booking.bookingDetails.startTime} - {booking.bookingDetails.endTime}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="3" className="text-center py-4">No bookings found</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

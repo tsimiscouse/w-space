@@ -45,7 +45,6 @@ app.use("/api/contact", contactRoutes);
 // Admin Routes
 app.use('/api/admin', adminRoutes);
 
-app.use("/api/history", require('./src/routes/History'));
 
 // Basic route
 app.get("/", (req, res) => {

@@ -229,3 +229,43 @@ exports.updateBookingStatus = async (req, res) => {
   }
 };
 
+exports.getAllBookings_n = async (req, res) => {
+  const { spaceId } = req.query;
+
+  try {
+      let bookings;
+
+      // If `spaceId` is provided, filter bookings by `spaceId`
+      if (spaceId) {
+          // Validate `spaceId` format
+          if (!mongoose.Types.ObjectId.isValid(spaceId)) {
+              return res.status(400).json({ message: 'Invalid spaceId format' });
+          }
+
+          bookings = await Booking.find({ spaceId })
+              .populate('spaceId')
+              .populate('userId');
+      } else {
+          // Fetch all bookings if no `spaceId` filter is provided
+          bookings = await Booking.find()
+              .populate('spaceId')
+              .populate('userId');
+      }
+
+      // If no bookings found, return a 404 response
+      if (!bookings.length) {
+          return res.status(404).json({ message: 'No bookings found' });
+      }
+
+      // Send the found bookings as a response
+      res.status(200).json(bookings);
+  } catch (error) {
+      console.error('Error fetching bookings:', error);
+      res.status(500).json({
+          message: 'Error fetching bookings',
+          error: error.message
+      });
+  }
+};
+
+
