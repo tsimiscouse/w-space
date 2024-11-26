@@ -9,6 +9,9 @@ import FindPage from './components/FindPage.jsx';
 import SpacePage from './components/SpacePage.jsx';
 import BookingReceipt from './components/BookingReceipt.jsx';
 import ContactUs from './components/ContactUs.jsx';
+import AboutUs from './components/AboutUs.jsx'; 
+import OurTeam from './components/OurTeam.jsx'; 
+import Activity from './components/Activity.jsx';
 import './App.css';
 
 import AdminDashboard from './components/admin/AdminDashboard.jsx';
@@ -89,7 +92,11 @@ function App() {
                     <Route path="/search" element={<FindPage />} />
                     <Route path="/spaces/:_id" element={<SpacePage />} />
                     <Route path="/booking-receipt/:_Id" element={<BookingReceipt />} />
-                    <Route path="/contact-us" element={<ContactUs />} /> 
+                    <Route path="/contact-us" element={<ContactUs />} />
+                    <Route path="/about-us" element={<AboutUs />} />
+                    <Route path="/our-team" element={<OurTeam />} />
+                    <Route path="/activity" element={<Activity />} /> 
+                      
 
                     {/* Admin Routes - Protected */}
                     {isAdmin && (
