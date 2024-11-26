@@ -29,6 +29,9 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
 
+// Handle preflight requests (OPTIONS) explicitly
+app.options('*', cors(corsOptions));
+
 // Setup database connection
 const connectDB = require("./config/db");
 connectDB();
