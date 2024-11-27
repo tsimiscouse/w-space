@@ -12,35 +12,11 @@ dotenv.config();
 // Initialize Express app
 const app = express();
 
-const corsOptions = {
-  origin: `https://w-space-4tv1.vercel.app`,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true,
-  allowedHeaders: [
-    'Content-Type', 
-    'Authorization', 
-    'Access-Control-Allow-Credentials'
-  ]
-};
-
 // Middleware
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
-
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', req.headers.origin);
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  
-  // Intercept OPTIONS method
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
-  }
-  next();
-});
 
 // Setup database connection
 const connectDB = require("./config/db");
