@@ -23,15 +23,15 @@ router.post("/", async (req, res) => {
         const token = user.generateAuthToken(); 
 
         // Set the token in a cookie
-        res.cookie('token', token, { httpOnly: true, secure: false, path: "/" });
-        // res.cookie('token', token, { httpOnly: true,
-        //     secure: process.env.NODE_ENV === "production",
-        //     maxAge: 24 * 60 * 60 * 10000,
-        //     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        //     domain:
-        //       process.env.NODE_ENV === "production"
-        //         ? process.env.FRONTEND_URN
-        //         : "localhost", });
+        // res.cookie('token', token, { httpOnly: true, secure: false, path: "/" });
+        res.cookie('token', token, { httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            maxAge: 24 * 60 * 60 * 10000,
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            domain:
+              process.env.NODE_ENV === "production"
+                ? process.env.FRONTEND_URN
+                : "localhost", });
         return res.redirect('/');
 
     } catch (error) {
