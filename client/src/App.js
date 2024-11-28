@@ -17,7 +17,7 @@ import './App.css';
 import AdminDashboard from './components/admin/AdminDashboard.jsx';
 import SpaceManagement from './components/admin/SpaceManagement.jsx';
 import BookingManagement from './components/admin/BookingManagement.jsx';
-import api from './axios.js';
+import axios from 'axios';
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -28,7 +28,7 @@ function App() {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const response = await api.get(`/auth/profile`);
+                const response = await axios.get(`https://api.w-space.site/api/auth/profile`);
 
                 if (response.ok) {
                     setIsAuthenticated(true);
