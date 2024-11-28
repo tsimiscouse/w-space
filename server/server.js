@@ -14,8 +14,10 @@ const app = express();
 
 const corsOptions = {
     origin: [
-        'https:w-space.site',
-        `https://w-space-4tv1.vercel.app`,
+        "https:w-space.site",
+        "https://www.w-space.site",
+        "https://w-space-4tv1.vercel.app",
+        "https://localhost:5000",
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
