@@ -60,11 +60,8 @@ function App() {
     const handleLoginSuccess = () => {
         setIsAuthenticated(true);
         setIsLoading(true);
-        setTimeout(() => {
-            window.location.reload();
-            navigate('/');
-            setIsLoading(false);
-        }, 4000);
+        navigate('/app');
+        setIsLoading(false);
     };
 
 
