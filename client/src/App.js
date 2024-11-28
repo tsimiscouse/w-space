@@ -28,7 +28,7 @@ function App() {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const response = await axios.get(`https://api.w-space.site/api/auth/profile`);
+                const response = await axios.get(`https://api.w-space.site/api/auth/profile`, { withCredentials: true });
 
                 if (response.ok) {
                     setIsAuthenticated(true);

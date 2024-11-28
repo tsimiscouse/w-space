@@ -28,7 +28,7 @@ const Login = ({ onLoginSuccess }) => {
         await axios.post('https://api.w-space.site/api/auth', {
             email: data.email,
             password: data.password
-        });
+        }, { withCredentials: true }); 
         if (rememberMe) {
             localStorage.setItem("email", data.email);
         } else {
