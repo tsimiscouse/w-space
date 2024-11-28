@@ -25,7 +25,7 @@ const Login = ({ onLoginSuccess }) => {
         setLoading(true);
         setError("");
         try {
-            await api.post(`/auth`);
+            await api.post(`api/auth`);
             if (rememberMe) {
                 localStorage.setItem("email", data.email);
             } else {

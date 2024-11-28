@@ -71,7 +71,7 @@ const SpacePage = () => {
   useEffect(() => {
     const fetchSpaceDetails = async () => {
       try {
-        const response = await api.get(`/spaces/${_id}`);
+        const response = await api.get(`api/spaces/${_id}`);
         setSpace(response.data);
         setLoading(false);
 
@@ -166,7 +166,7 @@ const SpacePage = () => {
     };
 
     try {
-      await api.post(`/bookings`, bookingData, {
+      await api.post(`api/bookings`, bookingData, {
         withCredentials: true,
       });
       setBookingConfirmationDetails(bookingData.bookingDetails);
@@ -179,7 +179,7 @@ const SpacePage = () => {
 
   const checkSpaceAvailability = async (bookingDate, startTime, endTime) => {
     try {
-      const response = await api.get(`/bookings/check-availability`, {
+      const response = await api.get(`api/bookings/check-availability`, {
         params: {
           spaceId: _id,
           date: bookingDate,
