@@ -21,26 +21,30 @@ const Login = ({ onLoginSuccess }) => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setError("");
-        try {
-            await axios.post(`https://api.w-space.site/api/auth`);
-            if (rememberMe) {
-                localStorage.setItem("email", data.email);
-            } else {
-                localStorage.removeItem("email");
-            }
-            onLoginSuccess(); 
-            navigate('/app');
-        } catch (error) {
-            if (error.response && error.response.status >= 400 && error.response.status <= 500) {
-                setError(error.response.data.message); 
-            }
-        } finally {
-            setLoading(false);
+    e.preventDefault();
+    setLoading(true);
+    setError(""); 
+    try {
+        await axios.post('https://api.w-space.site/api/auth', {
+            email: data.email,
+            password: data.password
+        });
+        if (rememberMe) {
+            localStorage.setItem("email", data.email);
+        } else {
+            localStorage.removeItem("email");
         }
-    };
+        onLoginSuccess(); 
+        navigate('/app');
+    } catch (error) {
+        if (error.response && error.response.status >= 400 && error.response.status <= 500) {
+            setError(error.response.data.message); 
+        }
+    } finally {
+        setLoading(false);
+    }
+};
+
 
     return (
             <div className="min-h-screen flex flex-col md:flex-row">
