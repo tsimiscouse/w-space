@@ -24,7 +24,8 @@ router.post("/", async (req, res) => {
 
         // Set the token in a cookie
         // res.cookie('token', token, { httpOnly: true, secure: false, path: "/" });
-        res.cookie('token', token, { httpOnly: true,
+        res.cookie('token', token, { 
+            httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             maxAge: 24 * 60 * 60 * 10000,
             sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
@@ -43,9 +44,6 @@ router.post("/", async (req, res) => {
 // Profile route
 router.get("/profile", verifyToken, async (req, res) => {
     try {
-        res.header('Access-Control-Allow-Origin', 'https://w-space-4tv1.vercel.app');
-        res.header('Access-Control-Allow-Credentials', true);
-
         // Fetch user data from the database
         const userProfile = await User.findById(req.user._id);
         if (!userProfile) {
@@ -63,7 +61,15 @@ router.get("/profile", verifyToken, async (req, res) => {
                 lastName: userProfile.lastName,
                 role: userProfile.role,
             }),
-            { secure: false }
+            { 
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production", 
+                sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+                domain:
+                  process.env.NODE_ENV === "production"
+                    ? process.env.FRONTEND_URN
+                    : "localhost", 
+            }
         );
 
         // Send the profile data as part of the response as well (optional)
@@ -95,8 +101,24 @@ const validate = (data) => {
 
 // Log Out Routes
 router.post("/logout", (req, res) => {
-    res.clearCookie("token", { httpOnly: true, secure: false });
-    res.clearCookie("userProfile", { httpOnly: true, secure: false });
+    res.clearCookie("token", { 
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", 
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        domain:
+          process.env.NODE_ENV === "production"
+            ? process.env.FRONTEND_URN
+            : "localhost", 
+        });
+    res.clearCookie("userProfile", { 
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", 
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        domain:
+          process.env.NODE_ENV === "production"
+            ? process.env.FRONTEND_URN
+            : "localhost",
+        });
     return res.send({ message: "Logged out successfully" });
 });
 
