@@ -23,7 +23,12 @@ const Signup = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const { data: res } = await axios.post(`https://api.w-space.site/api/users`);
+            const { data: res } = await axios.post(`https://api.w-space.site/api/users`, {
+                firstName: data.firstName,
+                lastName: data.lastName,
+                email: data.email,
+                password: data.password
+            });
             navigate("/");
             console.log(res.message);
         } catch (error) {
