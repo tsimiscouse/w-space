@@ -14,7 +14,7 @@
 ## 🔗 **Important Links**
 - 🌐 **W-Space Showcase**: [https://w-space.my.canva.site/](https://w-space.my.canva.site/)  
 - 📄 **Documentation & Demo**: [bit.ly/PAW16](https://bit.ly/PAW16)  
-- 💻 **W-Space Web App**: [w-space.site](w-space.site)
+- 💻 **W-Space Web App**: [w-space.site](https://www.w-space.site/)
 
 ---
 
@@ -161,7 +161,7 @@ w-space/
 
 Kunjungi link berikut untuk dokumentasi lengkap, video demo CRUD, dan aplikasi yang sudah di-deploy:
 - 📄 **Dokumentasi & Video Demo**: [bit.ly/PAW_16](https://bit.ly/PAW_16)  
-- 💻 **W-Space Web App**: [w-space.site](w-space.site)
+- 💻 **W-Space Web App**: [w-space.site](https://www.w-space.site/)
 
 [![PAW16 Dokumentasi](https://img.shields.io/badge/Documentation-PAW_16-blue)](https://bit.ly/PAW_16)
 
