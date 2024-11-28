@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from '../axios';
+import axios from 'axios';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Loader from './Loader/Loader';
@@ -71,7 +71,7 @@ const SpacePage = () => {
   useEffect(() => {
     const fetchSpaceDetails = async () => {
       try {
-        const response = await api.get(`api/spaces/${_id}`);
+        const response = await axios.get(`https://api.w-space.site/api/spaces/${_id}`);
         setSpace(response.data);
         setLoading(false);
 
@@ -166,7 +166,7 @@ const SpacePage = () => {
     };
 
     try {
-      await api.post(`api/bookings`, bookingData, {
+      await axios.post(`https://api.w-space.site/api/bookings`, bookingData, {
         withCredentials: true,
       });
       setBookingConfirmationDetails(bookingData.bookingDetails);
@@ -179,7 +179,7 @@ const SpacePage = () => {
 
   const checkSpaceAvailability = async (bookingDate, startTime, endTime) => {
     try {
-      const response = await api.get(`api/bookings/check-availability`, {
+      const response = await axios.get(`https://api.w-space.site/api/bookings/check-availability`, {
         params: {
           spaceId: _id,
           date: bookingDate,

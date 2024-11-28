@@ -5,7 +5,7 @@ import Navbar from './Navbar';
 import Footer from './Footer'; 
 import SpaceCard from './SpaceCard';
 import GoogleMaps from './GoogleMaps'; 
-import axios from '../axios';
+import axios from 'axios';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import api from '../axios';
@@ -53,7 +53,7 @@ const FindPage = () => {
   useEffect(() => {
     const fetchSpaces = async () => {
       try {
-        const response = await api.get(`/spaces`); // Fetch all spaces
+        const response = await axios.get(`https://api.w-space.site/api/spaces`); // Fetch all spaces
         setSpaces(response.data);
         
         // For mobile, limit to 10 closest spaces
@@ -89,7 +89,7 @@ const FindPage = () => {
   useEffect(() => {
     const fetchSpacesByQuery = async () => {
       try {
-        const response = await api.get(`/spaces/search`, {
+        const response = await axios.get(`https://api.w-space.site/api/spaces/search`, {
           params: { query },
         });
         
@@ -138,7 +138,7 @@ const FindPage = () => {
     if (!query) {
       setQuery(''); 
       setSelectedSpace(null); 
-      const response = await api.get(`/spaces`); 
+      const response = await axios.get(`https://api.w-space.site/api/spaces`); 
       setSpaces(response.data);
       
       // For mobile, limit to 10 closest spaces

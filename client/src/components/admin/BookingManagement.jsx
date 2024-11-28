@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "../../axios";
+import axios from "axios";
 import Navbar from './AdminNavbar';
 import Footer from '../Footer';
 import { 
@@ -41,8 +41,8 @@ const BookingManagement = () => {
   // Fetch bookings based on `spaceId`
   const fetchBookings = async (spaceId) => {
     try {
-      const response = await api.get(
-        `api/bookings?spaceId=${spaceId}`
+      const response = await axios.get(
+        `https://api.w-space.site/api/bookings?spaceId=${spaceId}`
       );
   
       const bookingsWithParsedTimes = response.data.map((booking) => {
@@ -81,7 +81,7 @@ const BookingManagement = () => {
   // Fetch all spaces
   const fetchSpaces = async () => {
     try {
-      const response = await api.get(`api/spaces`);
+      const response = await axios.get(`https://api.w-space.site/api/spaces`);
       setSpaces(response.data);
       if (response.data.length > 0) {
         // Automatically select the first space
@@ -97,8 +97,8 @@ const BookingManagement = () => {
     if (!selectedBooking) return;
 
     try {
-      await api.patch(
-        `api/bookings/${selectedBooking._id}/status`,
+      await axios.patch(
+        `https://api.w-space.site/api/bookings/${selectedBooking._id}/status`,
         { status: selectedBooking.status }
       );
 
@@ -127,7 +127,7 @@ const BookingManagement = () => {
   // Delete a booking
   const handleDeleteBooking = async (bookingId) => {
     try {
-      await api.delete(`api/bookings/${bookingId}`);
+      await axios.delete(`https://api.w-space.site/api/bookings/${bookingId}`);
       setBookings(bookings.filter((booking) => booking._id !== bookingId));
     } catch (error) {
       console.error("Error deleting booking:", error);

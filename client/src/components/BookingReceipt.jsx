@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from '../axios';
+import axios from 'axios';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Loader from './Loader/Loader';
@@ -15,7 +15,7 @@ const BookingReceipt = () => {
   useEffect(() => {
     const fetchBookingDetails = async () => {
       try {
-        const response = await api.get(`/bookings/${_Id}`);
+        const response = await axios.get(`https://api.w-space.site/api/bookings/${_Id}`);
         setBooking(response.data);
         setLoading(false);
       } catch (error) {

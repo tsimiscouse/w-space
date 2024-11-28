@@ -23,7 +23,7 @@ const SpaceCarousel = () => {
   useEffect(() => {
     const fetchSpaces = async () => {
       try {
-        const response = await api.get(`/spaces`);
+        const response = await axios.get(`https://api.w-space.site/api/spaces`);
         setSpaces(response.data);
         setLoading(false);
       } catch (error) {

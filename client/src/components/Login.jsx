@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "../axios";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from '../assets/Logo.jpg';
 import Loader from '../components/Loader/Loader'; 
@@ -25,7 +25,7 @@ const Login = ({ onLoginSuccess }) => {
         setLoading(true);
         setError("");
         try {
-            await api.post(`api/auth`);
+            await axios.post(`https://api.w-space.site/api/auth`);
             if (rememberMe) {
                 localStorage.setItem("email", data.email);
             } else {
