@@ -15,7 +15,7 @@ const Navbar = () => {
 
     const fetchUserData = async () => {
         try {
-            const response = await api.get(`/auth/profile`); 
+            const response = await api.get(`api/auth/profile`); 
             setFirstName(response.data.user.firstName);
         } catch (error) {
             console.error("Failed to fetch user data:", error);
@@ -42,7 +42,7 @@ const Navbar = () => {
     const handleLogout = async () => {
         try {
             // Call logout API to clear the token server-side
-            await api.post('/auth/logout');
+            await api.post('api/auth/logout');
     
             // Clear the cookie from the client-side
             Cookies.remove("token", { path: "/" });  

@@ -59,7 +59,7 @@ const SpaceManagement = () => {
 
   const fetchSpaces = async () => {
     try {
-      const response = await api.get(`/spaces`);
+      const response = await api.get(`api/spaces`);
       setSpaces(response.data);
     } catch (error) {
       console.error('Error fetching spaces:', error);
@@ -68,7 +68,7 @@ const SpaceManagement = () => {
 
   const handleCreateSpace = async () => {
     try {
-      const response = await api.post(`/spaces`, newSpace);
+      const response = await api.post(`api/spaces`, newSpace);
       setSpaces([...spaces, response.data.space]);
       setNewSpace(initialSpaceState);
       setIsDialogOpen(false);
@@ -79,7 +79,7 @@ const SpaceManagement = () => {
 
   const handleUpdateSpace = async () => {
     try {
-      const response = await api.put(`/spaces/${editingSpace._id}`, editingSpace);
+      const response = await api.put(`api/spaces/${editingSpace._id}`, editingSpace);
       setSpaces(spaces.map((space) =>
         space._id === editingSpace._id ? response.data.space : space
       ));
@@ -92,7 +92,7 @@ const SpaceManagement = () => {
 
   const handleDeleteSpace = async (spaceId) => {
     try {
-      await api.delete(`/spaces/${spaceId}`);
+      await api.delete(`api/spaces/${spaceId}`);
       setSpaces(spaces.filter((space) => space._id !== spaceId));
       setDeleteConfirmation(null);
     } catch (error) {
