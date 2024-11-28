@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import axios from "../../axios";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { FaBars, FaUserCircle } from "react-icons/fa"; 
 import Logo from '../../assets/Logo.jpg';
@@ -15,7 +15,7 @@ const Navbar = () => {
 
     const fetchUserData = async () => {
         try {
-            const response = await api.get(`api/auth/profile`); 
+            const response = await axios.get(`https://api.w-space.site/api/auth/profile`); 
             setFirstName(response.data.user.firstName);
         } catch (error) {
             console.error("Failed to fetch user data:", error);
@@ -42,7 +42,7 @@ const Navbar = () => {
     const handleLogout = async () => {
         try {
             // Call logout API to clear the token server-side
-            await api.post('api/auth/logout');
+            await axios.post('https://api.w-space.site/api/auth/logout');
     
             // Clear the cookie from the client-side
             Cookies.remove("token", { path: "/" });  

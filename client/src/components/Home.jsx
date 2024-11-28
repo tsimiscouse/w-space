@@ -35,7 +35,7 @@ const Home = () => {
         const fetchSpaces = async () => {
             try {
                 setIsLoading(true); 
-                const response = await api.get(`/spaces`, { timeout: 5000 }); 
+                const response = await axios.get(`https://api.w-space.site/api/spaces`, { timeout: 5000 }); 
                 setSpaces(response.data);
                 setIsLoading(false);
             } catch (error) {

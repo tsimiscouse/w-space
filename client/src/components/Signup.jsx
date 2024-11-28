@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "../axios";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from '../assets/Logo.jpg';
 import api from '../axios';
@@ -23,7 +23,7 @@ const Signup = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const { data: res } = await api.post(`/users`);
+            const { data: res } = await axios.post(`https://api.w-space.site/api/users`);
             navigate("/");
             console.log(res.message);
         } catch (error) {

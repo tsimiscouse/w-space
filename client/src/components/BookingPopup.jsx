@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from '../axios';
+import axios from 'axios';
 import api from '../axios';
 
 const BookingConfirmationPopup = ({ 
@@ -18,7 +18,7 @@ const BookingConfirmationPopup = ({
       if (!isOpen) return;
 
       try {
-        const response = await api.get(`/spaces/${_id}`);
+        const response = await axios.get(`https://api.w-space.site/api/spaces/${_id}`);
         setSpaceDetails(response.data);
         setLoading(false);
       } catch (error) {
