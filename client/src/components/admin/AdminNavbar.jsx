@@ -15,7 +15,9 @@ const Navbar = () => {
 
     const fetchUserData = async () => {
         try {
-            const response = await axios.get(`https://api.w-space.site/api/auth/profile`); 
+            const response = await axios.get(`https://api.w-space.site/api/auth/profile`, { 
+                withCredentials: true 
+            }); 
             setFirstName(response.data.user.firstName);
         } catch (error) {
             console.error("Failed to fetch user data:", error);
