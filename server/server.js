@@ -12,11 +12,26 @@ dotenv.config();
 // Initialize Express app
 const app = express();
 
+const corsOptions = {
+    origin: [
+        'https:w-space.site',
+        `https://w-space-4tv1.vercel.app`,
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    credentials: true,
+    allowedHeaders: [
+        'Content-Type', 
+        'Authorization', 
+        'Access-Control-Allow-Credentials'
+    ]
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
+
 
 // Setup database connection
 const connectDB = require("./config/db");
