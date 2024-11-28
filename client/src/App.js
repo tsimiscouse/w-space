@@ -1,4 +1,4 @@
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import Login from './components/Login.jsx';
@@ -28,28 +28,23 @@ function App() {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const response = await axios.get(`https://api.w-space.site/api/auth/profile`, { withCredentials: true });
-
-                if (response.ok) {
-                    setIsAuthenticated(true);
+                const response = await axios.get(`https://api.w-space.site/api/auth/profile`, { 
+                    withCredentials: true 
+                });
     
-                    const token = getCookie('userProfile'); // Get token from cookies
+                if (response.status === 200) {
+                    setIsAuthenticated(true);
+        
+                    const token = getCookie('userProfile');
                     if (token) {
                         try {
-                            // Decode URL-encoded JSON manually
                             const decodedToken = JSON.parse(decodeURIComponent(token));
-                            if (decodedToken.role === 'admin') {
-                                setIsAdmin(true);
-                            } else {
-                                setIsAdmin(false);
-                            }
+                            setIsAdmin(decodedToken.role === 'admin');
                         } catch (error) {
                             console.error('Token decoding failed:', error);
-                            setIsAuthenticated(false); // Handle invalid token
+                            setIsAuthenticated(false);
                         }
                     }
-                } else {
-                    setIsAuthenticated(false);
                 }
             } catch (err) {
                 console.error('Authentication check failed:', err);
@@ -58,7 +53,7 @@ function App() {
                 setIsLoading(false);
             }
         };
-
+    
         checkAuth();
     }, [navigate]);
 
@@ -86,6 +81,8 @@ function App() {
             {/* Protected Routes */}
             {isAuthenticated ? (
                 <>
+                    <Route path="/" element={<Navigate to="/app" replace />} />
+                    <Route path="/login" element={<Navigate to="/app" replace />} />
                     <Route path="/app" element={<Home />} />
                     <Route path="/search" element={<FindPage />} />
                     <Route path="/spaces/:_id" element={<SpacePage />} />
